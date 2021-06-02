@@ -5,39 +5,46 @@ import java.io.IOException;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
+import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
-import org.example.App;
-import org.example.Service.JsonService;
+import javafx.stage.Stage;
 
 public class FirstStageController {
 
     @FXML
-    private TextField directoryField;
+    private TextField directoryFileField;
 
     @FXML
-    private void nextStep() throws IOException {
-        if(directoryField.getText().equals("")){
-            errorWindow("Wybierz plik do konwersji aby przejść dalej!!!");
+    private TextField directoryCatalogField;
+
+    @FXML
+    private void nextStep(ActionEvent actionEvent) throws IOException {
+        if(directoryFileField.getText().equals("")){
+            errorWindow("Aby przejść dalej upewnij się, że wybrałeś plik oraz katalog!!!");
         } else {
-            App.setRoot("FXML/secondStage");
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/example/FXML/secondStage.fxml"));
+            Parent root = loader.load();
+            SecondStageController secondController = loader.getController();
+            secondController.setPath(directoryFileField.getText(), directoryCatalogField.getText());
+            Scene scene = new Scene(root);
+            Stage stage = (Stage)((Node)actionEvent.getSource()).getScene().getWindow();
+            stage.setScene(scene);
+            stage.show();
         }
     }
 
     public void selectFile(ActionEvent event) {
-        JsonService jsonService = new JsonService();
         FileChooser fileChooser = new FileChooser();
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("JSON Files", "*.json"));
         File file = fileChooser.showOpenDialog(null);
-
         if(file != null){
-            directoryField.setText(file.getAbsolutePath());
-            try {
-                jsonService.parseJson(file.getAbsolutePath());
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            directoryFileField.setText(file.getAbsolutePath());
         } else {
             errorWindow("Wystapił błąd w wyborze pliku. Spróbuj ponownie.");
         }
@@ -49,5 +56,16 @@ public class FirstStageController {
         alert.setHeaderText("Wystąpił błąd");
         alert.setContentText(errorType);
         alert.showAndWait();
+    }
+
+    public void selectDirectory(ActionEvent event) {
+        DirectoryChooser directoryChooser = new DirectoryChooser();
+        File selectedDirectory = directoryChooser.showDialog(null);
+
+        if(selectedDirectory != null){
+            directoryCatalogField.setText(selectedDirectory.getAbsolutePath());
+        }else{
+            errorWindow("Wystapił błąd w wyborze ściezki. Spróbuj ponownie.");
+        }
     }
 }

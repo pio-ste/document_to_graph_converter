@@ -3,6 +3,7 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.effect.Bloom?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
@@ -12,13 +13,13 @@
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" style="-fx-background-color: #2d3447;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.Controller.SecondStageController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1200.0" style="-fx-background-color: #2d3447;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.Controller.SecondStageController">
    <top>
       <HBox alignment="CENTER" prefHeight="60.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <children>
             <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="75.0">
                <children>
-                  <Button mnemonicParsing="false" onAction="#previousStep" style="-fx-background-color: #2693ff;">
+                  <Button mnemonicParsing="false" onAction="#previousStep" prefWidth="70.0" style="-fx-background-color: #2693ff;">
                      <graphic>
                         <ImageView fitHeight="28.0" fitWidth="28.0" nodeOrientation="RIGHT_TO_LEFT" pickOnBounds="true" preserveRatio="true">
                            <image>
@@ -30,13 +31,13 @@
                         </ImageView>
                      </graphic>
                      <VBox.margin>
-                        <Insets top="25.0" />
+                        <Insets top="20.0" />
                      </VBox.margin>
                   </Button>
                </children></VBox>
-            <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="250.0">
+            <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="300.0">
                <children>
-                  <Label alignment="CENTER" text="Krok 1: Wybór plików" textFill="#4d4d4d">
+                  <Label alignment="CENTER" text="Krok 1: Wybór pliku" textFill="#4d4d4d">
                      <font>
                         <Font name="System Bold" size="18.0" />
                      </font>
@@ -44,10 +45,10 @@
                         <Insets top="25.0" />
                      </VBox.margin>
                   </Label>
-                  <Line endX="100.0" startX="-120.0" stroke="#4d4d4d" strokeWidth="2.0" />
+                  <Line endX="100.0" startX="-140.0" stroke="#4d4d4d" strokeWidth="2.0" />
                </children>
             </VBox>
-            <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="250.0">
+            <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="300.0">
                <children>
                   <Label text="Krok 2: Tworzenie relacji" textFill="#2693ff">
                      <font>
@@ -57,10 +58,10 @@
                         <Insets top="25.0" />
                      </VBox.margin>
                   </Label>
-                  <Line endX="100.0" startX="-120.0" stroke="#2693ff" strokeWidth="2.0" />
+                  <Line endX="100.0" startX="-140.0" stroke="#2693ff" strokeWidth="2.0" />
                </children>
             </VBox>
-            <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="250.0">
+            <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="300.0">
                <children>
                   <Label text="Krok 3: Konwersja" textFill="#4d4d4d">
                      <font>
@@ -70,12 +71,12 @@
                         <Insets top="25.0" />
                      </VBox.margin>
                   </Label>
-                  <Line endX="100.0" startX="-110.0" stroke="#4d4d4d" strokeWidth="2.0" />
+                  <Line endX="100.0" startX="-140.0" stroke="#4d4d4d" strokeWidth="2.0" />
                </children>
             </VBox>
             <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="75.0">
                <children>
-                  <Button mnemonicParsing="false" onAction="#nextStep" style="-fx-background-color: #2693ff;">
+                  <Button mnemonicParsing="false" onAction="#nextStep" prefWidth="70.0" style="-fx-background-color: #2693ff;">
                      <graphic>
                         <ImageView fitHeight="28.0" fitWidth="28.0" pickOnBounds="true" preserveRatio="true">
                            <image>
@@ -87,7 +88,7 @@
                         </ImageView>
                      </graphic>
                      <VBox.margin>
-                        <Insets top="25.0" />
+                        <Insets top="20.0" />
                      </VBox.margin>
                   </Button>
                </children>
@@ -95,4 +96,31 @@
          </children>
       </HBox>
    </top>
+   <center>
+      <HBox BorderPane.alignment="CENTER">
+         <children>
+            <VBox alignment="TOP_CENTER" prefWidth="400.0">
+               <children>
+                  <Label alignment="CENTER" contentDisplay="CENTER" text="Zawartość pliku JSON" textFill="#2693ff">
+                     <font>
+                        <Font name="System Bold" size="17.0" />
+                     </font>
+                     <VBox.margin>
+                        <Insets top="10.0" />
+                     </VBox.margin>
+                  </Label>
+                  <TextArea fx:id="jsonContentTextField" editable="false" prefHeight="700.0">
+                     <VBox.margin>
+                        <Insets left="5.0" right="5.0" />
+                     </VBox.margin></TextArea>
+               </children>
+               <HBox.margin>
+                  <Insets />
+               </HBox.margin>
+            </VBox>
+            <VBox prefHeight="200.0" prefWidth="100.0" />
+            <VBox prefHeight="200.0" prefWidth="100.0" />
+         </children>
+      </HBox>
+   </center>
 </BorderPane>

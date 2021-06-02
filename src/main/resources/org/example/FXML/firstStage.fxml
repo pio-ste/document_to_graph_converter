@@ -13,14 +13,14 @@
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" style="-fx-background-color: #2d3447;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.Controller.FirstStageController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1200.0" style="-fx-background-color: #2d3447;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.Controller.FirstStageController">
    <top>
       <HBox alignment="CENTER" prefHeight="60.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <children>
             <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="75.0" />
-            <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="250.0">
+            <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="300.0">
                <children>
-                  <Label alignment="CENTER" text="Krok 1: Wybór plików" textFill="#2693ff">
+                  <Label alignment="CENTER" text="Krok 1: Wybór pliku" textFill="#2693ff">
                      <font>
                         <Font name="System Bold" size="18.0" />
                      </font>
@@ -28,10 +28,10 @@
                         <Insets top="25.0" />
                      </VBox.margin>
                   </Label>
-                  <Line endX="100.0" startX="-120.0" stroke="#2693ff" strokeWidth="2.0" />
+                  <Line endX="100.0" startX="-140.0" stroke="#2693ff" strokeWidth="2.0" />
                </children>
             </VBox>
-            <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="250.0">
+            <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="300.0">
                <children>
                   <Label text="Krok 2: Tworzenie relacji" textFill="#4d4d4d">
                      <font>
@@ -41,10 +41,10 @@
                         <Insets top="25.0" />
                      </VBox.margin>
                   </Label>
-                  <Line endX="100.0" startX="-120.0" stroke="#4d4d4d" strokeWidth="2.0" />
+                  <Line endX="100.0" startX="-140.0" stroke="#4d4d4d" strokeWidth="2.0" />
                </children>
             </VBox>
-            <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="250.0">
+            <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="300.0">
                <children>
                   <Label text="Krok 3: Konwersja" textFill="#4d4d4d">
                      <font>
@@ -54,12 +54,12 @@
                         <Insets top="25.0" />
                      </VBox.margin>
                   </Label>
-                  <Line endX="100.0" startX="-110.0" stroke="#4d4d4d" strokeWidth="2.0" />
+                  <Line endX="100.0" startX="-140.0" stroke="#4d4d4d" strokeWidth="2.0" />
                </children>
             </VBox>
             <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="75.0">
                <children>
-                  <Button mnemonicParsing="false" onAction="#nextStep" style="-fx-background-color: #2693ff;">
+                  <Button mnemonicParsing="false" onAction="#nextStep" prefWidth="70.0" style="-fx-background-color: #2693ff;">
                      <graphic>
                         <ImageView fitHeight="28.0" fitWidth="28.0" pickOnBounds="true" preserveRatio="true">
                            <image>
@@ -71,7 +71,7 @@
                         </ImageView>
                      </graphic>
                      <VBox.margin>
-                        <Insets top="25.0" />
+                        <Insets top="20.0" />
                      </VBox.margin>
                   </Button>
                </children>
@@ -82,22 +82,44 @@
    <center>
       <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
          <children>
-            <Label alignment="CENTER" contentDisplay="CENTER" text="Wybierz plik do konwersji" textFill="#2693ff">
+            <Label alignment="CENTER" contentDisplay="CENTER" text="Wybierz plik .json do konwersji" textFill="#2693ff">
                <font>
                   <Font name="System Bold" size="22.0" />
                </font>
                <VBox.margin>
-                  <Insets top="75.0" />
+                  <Insets top="100.0" />
                </VBox.margin>
             </Label>
             <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                <children>
-                  <Button mnemonicParsing="false" onAction="#selectFile" style="-fx-background-color: #2693ff;" text="Wybierz plik...">
+                  <Button mnemonicParsing="false" onAction="#selectFile" prefWidth="125.0" style="-fx-background-color: #2693ff;" text="Wybierz plik...">
                      <font>
                         <Font name="System Bold" size="12.0" />
                      </font>
                   </Button>
-                  <TextField fx:id="directoryField" editable="false" prefWidth="250.0">
+                  <TextField fx:id="directoryFileField" editable="false" prefWidth="300.0">
+                     <HBox.margin>
+                        <Insets left="40.0" />
+                     </HBox.margin>
+                  </TextField>
+               </children>
+            </HBox>
+            <Label text="Wybierz miejsce gdzie ma być zapisany plik .cypher" textFill="#2693ff">
+               <font>
+                  <Font name="System Bold" size="22.0" />
+               </font>
+               <VBox.margin>
+                  <Insets top="50.0" />
+               </VBox.margin>
+            </Label>
+            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <Button mnemonicParsing="false" onAction="#selectDirectory" prefWidth="125.0" style="-fx-background-color: #2693ff;" text="Wybierz katalog...">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font>
+                  </Button>
+                  <TextField fx:id="directoryCatalogField" editable="false" prefWidth="300.0">
                      <HBox.margin>
                         <Insets left="40.0" />
                      </HBox.margin>
