@@ -3,7 +3,10 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.effect.Bloom?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
@@ -99,7 +102,7 @@
    <center>
       <HBox BorderPane.alignment="CENTER">
          <children>
-            <VBox alignment="TOP_CENTER" prefWidth="400.0">
+            <VBox alignment="TOP_CENTER" prefWidth="500.0">
                <children>
                   <Label alignment="CENTER" contentDisplay="CENTER" text="Zawartość pliku JSON" textFill="#2693ff">
                      <font>
@@ -109,17 +112,61 @@
                         <Insets top="10.0" />
                      </VBox.margin>
                   </Label>
-                  <TextArea fx:id="jsonContentTextField" editable="false" prefHeight="700.0">
+                  <TextArea fx:id="jsonContentTextField" editable="false" prefHeight="695.0">
                      <VBox.margin>
-                        <Insets left="5.0" right="5.0" />
+                        <Insets left="5.0" right="5.0" top="5.0" />
                      </VBox.margin></TextArea>
                </children>
                <HBox.margin>
                   <Insets />
                </HBox.margin>
             </VBox>
-            <VBox prefHeight="200.0" prefWidth="100.0" />
-            <VBox prefHeight="200.0" prefWidth="100.0" />
+            <VBox alignment="TOP_CENTER" prefWidth="700.0">
+               <children>
+                  <Label alignment="CENTER" contentDisplay="CENTER" text="Znalezione relacje" textFill="#2693ff">
+                     <font>
+                        <Font name="System Bold" size="17.0" />
+                     </font>
+                     <VBox.margin>
+                        <Insets top="10.0" />
+                     </VBox.margin>
+                  </Label>
+                  <TableView fx:id="tableRelations" prefHeight="532.0" prefWidth="690.0" style="-fx-background-color: #2d3447;">
+                    <columns>
+                      <TableColumn fx:id="object1Column" prefWidth="250.0" text="Obiekt 1" />
+                      <TableColumn fx:id="relationColumn" prefWidth="188.0" text="Węzeł" />
+                        <TableColumn fx:id="object2Column" prefWidth="250.0" text="Obiekt2" />
+                    </columns>
+                     <VBox.margin>
+                        <Insets left="5.0" right="5.0" top="5.0" />
+                     </VBox.margin>
+                  </TableView>
+                  <HBox prefHeight="100.0" prefWidth="200.0">
+                     <children>
+                        <Label text="Nazwa węzła" textFill="#2693ff">
+                           <font>
+                              <Font name="System Bold" size="18.0" />
+                           </font>
+                           <HBox.margin>
+                              <Insets left="130.0" top="25.0" />
+                           </HBox.margin>
+                        </Label>
+                        <TextField prefWidth="200.0">
+                           <HBox.margin>
+                              <Insets left="20.0" top="28.0" />
+                           </HBox.margin>
+                        </TextField>
+                        <Button mnemonicParsing="false" style="-fx-background-color: #2693ff;" text="Zatwierdź">
+                           <HBox.margin>
+                              <Insets left="20.0" top="28.0" />
+                           </HBox.margin>
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font>
+                        </Button>
+                     </children>
+                  </HBox>
+               </children></VBox>
          </children>
       </HBox>
    </center>

@@ -3,20 +3,38 @@ package org.example.Controller;
 import java.io.IOException;
 
 import javafx.application.Platform;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import org.example.Service.JsonService;
+import org.example.Service.Sample;
 
 public class SecondStageController {
 
     @FXML
     private TextArea jsonContentTextField;
+
+    @FXML
+    private TableView<Sample> tableRelations;
+
+    @FXML
+    private TableColumn<Sample, String> object1Column;
+
+    @FXML
+    private TableColumn<Sample, String> relationColumn;
+
+    @FXML
+    private TableColumn<Sample, String> object2Column;
 
     public String filePath;
     public String catalogPath;
@@ -30,6 +48,7 @@ public class SecondStageController {
 
     @FXML
     public void initialize(){
+
         Platform.runLater(() -> {
             JsonService jsonService = new JsonService();
             try {
@@ -39,8 +58,19 @@ public class SecondStageController {
             } catch (Exception e) {
                 e.printStackTrace();
             }
+            object1Column.setCellValueFactory(new PropertyValueFactory<>("ObjectNameFirst"));
+            relationColumn.setCellValueFactory(new PropertyValueFactory<>("RelationName"));
+            object2Column.setCellValueFactory(new PropertyValueFactory<>("ObjectNameSecond"));
+            tableRelations.setItems(observableList());
         });
 
+    }
+
+    ObservableList<Sample> observableList() {
+        ObservableList<Sample> samples = FXCollections.observableArrayList();
+        samples.add(new Sample("Osoba", "Posiada", "Oceny"));
+        samples.add(new Sample("Osoba", "", "Adres"));
+        return samples;
     }
 
     @FXML

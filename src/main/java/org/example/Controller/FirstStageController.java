@@ -26,7 +26,7 @@ public class FirstStageController {
     @FXML
     private void nextStep(ActionEvent actionEvent) throws IOException {
         if(directoryFileField.getText().equals("")){
-            errorWindow("Aby przejść dalej upewnij się, że wybrałeś plik oraz katalog!!!");
+            errorWindow("Aby przejść dalej upewnij się, że wybrany jest plik oraz katalog!!!");
         } else {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/example/FXML/secondStage.fxml"));
             Parent root = loader.load();
