@@ -1,5 +1,8 @@
 package org.example.DTO;
 
+import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.Multimap;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -11,9 +14,9 @@ public class Document {
     private Integer joinId;
     private String edgeJoinName;
     private String type;
-    private Map<String, String> mapOfValues = new HashMap<>();
+    private Multimap<String, String> mapOfValues = ArrayListMultimap.create();
 
-    public Document(Integer id, String nodeName, String edgeName, Integer joinId, String edgeJoinName, String type, Map<String, String> mapOfValues) {
+    public Document(Integer id, String nodeName, String edgeName, Integer joinId, String edgeJoinName, String type, Multimap<String, String> mapOfValues) {
         this.id = id;
         this.nodeName = nodeName;
         this.edgeName = edgeName;
@@ -75,11 +78,11 @@ public class Document {
         this.type = type;
     }
 
-    public Map<String, String> getMapOfValues() {
+    public Multimap<String, String> getMapOfValues() {
         return mapOfValues;
     }
 
-    public void setMapOfValues(Map<String, String> mapOfValues) {
+    public void setMapOfValues(Multimap<String, String> mapOfValues) {
         this.mapOfValues = mapOfValues;
     }
 }

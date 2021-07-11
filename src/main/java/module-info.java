@@ -4,6 +4,7 @@ module org.example {
     requires com.fasterxml.jackson.databind;
     requires gson;
     requires org.json;
+    requires com.google.common;
 
     opens org.example.Controller to javafx.fxml;
     opens org.example.Service to javafx.base;
