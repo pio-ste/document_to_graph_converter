@@ -133,9 +133,9 @@
                   </Label>
                   <TableView fx:id="tableRelations" prefHeight="532.0" prefWidth="690.0" style="-fx-background-color: #2d3447;">
                     <columns>
-                      <TableColumn fx:id="object1Column" prefWidth="250.0" text="Obiekt 1" />
-                      <TableColumn fx:id="relationColumn" prefWidth="188.0" text="Węzeł" />
-                        <TableColumn fx:id="object2Column" prefWidth="250.0" text="Obiekt2" />
+                      <TableColumn fx:id="object1Column" prefWidth="240.0" text="Obiekt 1" />
+                      <TableColumn fx:id="relationColumn" prefWidth="208.0" text="Węzeł (połączony z)" />
+                        <TableColumn fx:id="object2Column" prefWidth="240.0" text="Obiekt 2" />
                     </columns>
                      <VBox.margin>
                         <Insets left="5.0" right="5.0" top="5.0" />
@@ -148,7 +148,7 @@
                               <Font name="System Bold" size="18.0" />
                            </font>
                            <HBox.margin>
-                              <Insets left="130.0" top="25.0" />
+                              <Insets left="119.0" top="25.0" />
                            </HBox.margin>
                         </Label>
                         <TextField prefWidth="200.0">

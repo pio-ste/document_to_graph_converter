@@ -2,7 +2,6 @@ package org.example.Service;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
-import com.google.common.collect.TreeMultimap;
 import org.example.DTO.Document;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -24,19 +23,16 @@ public class JsonService {
 
     private Integer counter = 0;
     private TreeMap<Integer, String> mapOfObjectID = new TreeMap<>();
-    private List<Integer> listOfID = new ArrayList<>();
-    private List<String> listOfObjectName = new ArrayList<>();
-    private TreeMultimap<Integer, String> mapOfObjectID1 = TreeMultimap.create();
     private List<Document> documentObjects = new ArrayList<>();
 
 
     public void parseJson(String filePath) throws Exception {
         String json = readFileAsString(filePath);
         System.out.println(json);
-        printJsonObject(json);
+        iterateOverJson(json);
     }
 
-    public void printJsonObject(String json_str) {
+    public List<Document> iterateOverJson(String json_str) {
         JSONArray jsonArray = new JSONArray(json_str);
         int length = jsonArray.length();
         for(int i=0; i<length; i++) {
@@ -58,6 +54,7 @@ public class JsonService {
             mapOfObjectID.clear();
         }
         System.out.println(documentObjects);
+        return documentObjects;
     }
 
     public void jsonConditions(String key, JSONObject jsonObject, Multimap<String, String> mapOfKeyValuesDocument){
@@ -117,7 +114,7 @@ public class JsonService {
                         mapOfKeyValuesDocumentArray.put(keyArray, jsonObjectOfArray.get(keyArray).toString());
                     }
                 }
-                addElementsIntoMap(mapOfKeyValuesDocumentArray, "ObjectArray");
+                addElementsIntoMap(mapOfKeyValuesDocumentArray, "Object");
             }
         }
         if (isArray){

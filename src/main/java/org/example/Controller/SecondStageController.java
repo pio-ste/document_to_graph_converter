@@ -1,6 +1,8 @@
 package org.example.Controller;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -16,8 +18,8 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
+import org.example.DTO.Document;
 import org.example.Service.JsonService;
-import org.example.Service.Sample;
 
 public class SecondStageController {
 
@@ -25,20 +27,21 @@ public class SecondStageController {
     private TextArea jsonContentTextField;
 
     @FXML
-    private TableView<Sample> tableRelations;
+    private TableView<Document> tableRelations;
 
     @FXML
-    private TableColumn<Sample, String> object1Column;
+    private TableColumn<Document, String> object1Column;
 
     @FXML
-    private TableColumn<Sample, String> relationColumn;
+    private TableColumn<Document, String> relationColumn;
 
     @FXML
-    private TableColumn<Sample, String> object2Column;
+    private TableColumn<Document, String> object2Column;
 
     public String filePath;
     public String catalogPath;
     public String jsonContent;
+    private List<Document> documentObjects = new ArrayList<>();
 
     @FXML
     public void setPath(String filePathField, String catalogPathField){
@@ -54,23 +57,26 @@ public class SecondStageController {
             try {
                 jsonContent = jsonService.readFileAsString(filePath);
                 jsonContentTextField.setText(jsonContent);
-                jsonService.printJsonObject(jsonContent);
+                documentObjects = jsonService.iterateOverJson(jsonContent);
+                tableRelations.setItems(observableList());
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            object1Column.setCellValueFactory(new PropertyValueFactory<>("ObjectNameFirst"));
-            relationColumn.setCellValueFactory(new PropertyValueFactory<>("RelationName"));
-            object2Column.setCellValueFactory(new PropertyValueFactory<>("ObjectNameSecond"));
-            tableRelations.setItems(observableList());
         });
+        object1Column.setCellValueFactory(new PropertyValueFactory<>("EdgeJoinName"));
+        relationColumn.setCellValueFactory(new PropertyValueFactory<>("NodeName"));
+        object2Column.setCellValueFactory(new PropertyValueFactory<>("EdgeName"));
 
     }
 
-    ObservableList<Sample> observableList() {
-        ObservableList<Sample> samples = FXCollections.observableArrayList();
-        samples.add(new Sample("Osoba", "Posiada", "Oceny"));
-        samples.add(new Sample("Osoba", "", "Adres"));
-        return samples;
+    ObservableList<Document> observableList() {
+        ObservableList<Document> documents = FXCollections.observableArrayList();
+        for (Document document : documentObjects) {
+            if (document.getJoinId() != null && document.getType().equals("Object")){
+                documents.add(new Document(document.getEdgeJoinName(), document.getNodeName(), document.getEdgeName()));
+            }
+        }
+        return documents;
     }
 
     @FXML
