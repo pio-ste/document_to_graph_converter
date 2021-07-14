@@ -3,6 +3,8 @@ package org.example.Controller;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -13,10 +15,9 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextArea;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import org.example.DTO.Document;
 import org.example.Service.JsonService;
@@ -30,6 +31,9 @@ public class SecondStageController {
     private TableView<Document> tableRelations;
 
     @FXML
+    private TableColumn<Document, Integer> idColumn;
+
+    @FXML
     private TableColumn<Document, String> object1Column;
 
     @FXML
@@ -38,10 +42,22 @@ public class SecondStageController {
     @FXML
     private TableColumn<Document, String> object2Column;
 
+    @FXML
+    private Label idLabel;
+
+    @FXML
+    private Label objectName1Label;
+
+    @FXML
+    private Label objectName2Label;
+
+    @FXML
+    private TextField nodeField;
+
     public String filePath;
     public String catalogPath;
     public String jsonContent;
-    private List<Document> documentObjects = new ArrayList<>();
+    private TreeMap<Integer, Document> documentObjects = new TreeMap<>();
 
     @FXML
     public void setPath(String filePathField, String catalogPathField){
@@ -58,26 +74,36 @@ public class SecondStageController {
                 jsonContent = jsonService.readFileAsString(filePath);
                 jsonContentTextField.setText(jsonContent);
                 documentObjects = jsonService.iterateOverJson(jsonContent);
-                tableRelations.setItems(observableList());
+                setTableView();
             } catch (Exception e) {
                 e.printStackTrace();
             }
         });
+
+
+    }
+
+
+    public void setTableView() {
+        idColumn.setCellValueFactory(new PropertyValueFactory<>("Id"));
         object1Column.setCellValueFactory(new PropertyValueFactory<>("EdgeJoinName"));
         relationColumn.setCellValueFactory(new PropertyValueFactory<>("NodeName"));
         object2Column.setCellValueFactory(new PropertyValueFactory<>("EdgeName"));
-
+        tableRelations.setItems(observableList());
     }
 
     ObservableList<Document> observableList() {
         ObservableList<Document> documents = FXCollections.observableArrayList();
-        for (Document document : documentObjects) {
+        for (Map.Entry<Integer, Document> documentEntry: documentObjects.entrySet()) {
+            Document document = documentEntry.getValue();
             if (document.getJoinId() != null && document.getType().equals("Object")){
-                documents.add(new Document(document.getEdgeJoinName(), document.getNodeName(), document.getEdgeName()));
+                documents.add(new Document(document.getId(), document.getEdgeJoinName(), document.getNodeName(), document.getEdgeName()));
             }
         }
         return documents;
     }
+
+
 
     @FXML
     private void nextStep(ActionEvent actionEvent) throws IOException {
@@ -97,5 +123,31 @@ public class SecondStageController {
         Stage stage = (Stage)((Node)actionEvent.getSource()).getScene().getWindow();
         stage.setScene(scene);
         stage.show();
+    }
+
+    @FXML
+    public void editRelation(ActionEvent event) {
+        String nodeName = nodeField.getText();
+        Integer idEdge = Integer.parseInt(idLabel.getText());
+        Document document;
+        document = documentObjects.get(idEdge);
+        document.setNodeName(nodeName);
+        documentObjects.put(idEdge, document);
+        System.out.println("");
+        setTableView();
+    }
+
+    @FXML
+    public void getSelectedRow(MouseEvent mouseEvent) {
+        Document document = tableRelations.getSelectionModel().getSelectedItem();
+        if (document == null){
+            idLabel.setText("-");
+            objectName1Label.setText("-");
+            objectName2Label.setText("-");
+        } else {
+            idLabel.setText(document.getId().toString());
+            objectName1Label.setText(document.getEdgeJoinName());
+            objectName2Label.setText(document.getEdgeName());
+        }
     }
 }

@@ -24,6 +24,7 @@ public class JsonService {
     private Integer counter = 0;
     private TreeMap<Integer, String> mapOfObjectID = new TreeMap<>();
     private List<Document> documentObjects = new ArrayList<>();
+    private TreeMap<Integer, Document> mapOfDocuments = new TreeMap<>();
 
 
     public void parseJson(String filePath) throws Exception {
@@ -32,7 +33,7 @@ public class JsonService {
         iterateOverJson(json);
     }
 
-    public List<Document> iterateOverJson(String json_str) {
+    public TreeMap<Integer, Document> iterateOverJson(String json_str) {
         JSONArray jsonArray = new JSONArray(json_str);
         int length = jsonArray.length();
         for(int i=0; i<length; i++) {
@@ -53,8 +54,8 @@ public class JsonService {
             //documentObjects.add(new Document(mapOfObjectID.lastKey(), "", mapOfObjectID.lastEntry().getValue(), 0, "", "Object", mapOfKeyValuesDocument));
             mapOfObjectID.clear();
         }
-        System.out.println(documentObjects);
-        return documentObjects;
+        System.out.println(mapOfDocuments);
+        return mapOfDocuments;
     }
 
     public void jsonConditions(String key, JSONObject jsonObject, Multimap<String, String> mapOfKeyValuesDocument){
@@ -138,7 +139,8 @@ public class JsonService {
             joinEdgeName = mapOfObjectID.lastEntry().getValue();
 
         }
-        documentObjects.add(new Document(edgeID, null, edgeName, joinEdgeID, joinEdgeName, type, mapOfKeyValuesDocument));
+        mapOfDocuments.put(edgeID, new Document(edgeID, null, edgeName, joinEdgeID, joinEdgeName, type, mapOfKeyValuesDocument));
+        //documentObjects.add(new Document(edgeID, null, edgeName, joinEdgeID, joinEdgeName, type, mapOfKeyValuesDocument));
     }
 
     public String readFileAsString(String filePath) throws Exception

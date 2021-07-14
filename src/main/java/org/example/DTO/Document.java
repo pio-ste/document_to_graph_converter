@@ -26,7 +26,8 @@ public class Document {
         this.mapOfValues = mapOfValues;
     }
 
-    public Document( String edgeJoinName, String nodeName, String edgeName ) {
+    public Document(Integer id, String edgeJoinName, String nodeName, String edgeName ) {
+        this.id = id;
         this.edgeJoinName = edgeJoinName;
         this.nodeName = nodeName;
         this.edgeName = edgeName;

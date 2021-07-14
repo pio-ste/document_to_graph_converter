@@ -131,41 +131,62 @@
                         <Insets top="10.0" />
                      </VBox.margin>
                   </Label>
-                  <TableView fx:id="tableRelations" prefHeight="532.0" prefWidth="690.0" style="-fx-background-color: #2d3447;">
+                  <TableView fx:id="tableRelations" onMouseClicked="#getSelectedRow" prefHeight="532.0" prefWidth="690.0" style="-fx-background-color: #2d3447;">
                     <columns>
-                      <TableColumn fx:id="object1Column" prefWidth="240.0" text="Obiekt 1" />
-                      <TableColumn fx:id="relationColumn" prefWidth="208.0" text="Węzeł (połączony z)" />
-                        <TableColumn fx:id="object2Column" prefWidth="240.0" text="Obiekt 2" />
+                        <TableColumn fx:id="idColumn" prefWidth="48.0" text="id." />
+                      <TableColumn fx:id="object1Column" prefWidth="220.0" text="Obiekt 1" />
+                      <TableColumn fx:id="relationColumn" prefWidth="200.0" text="Węzeł (połączony z)" />
+                        <TableColumn fx:id="object2Column" prefWidth="220.0" text="Obiekt 2" />
                     </columns>
                      <VBox.margin>
                         <Insets left="5.0" right="5.0" top="5.0" />
                      </VBox.margin>
                   </TableView>
-                  <HBox prefHeight="100.0" prefWidth="200.0">
+                  <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0">
                      <children>
-                        <Label text="Nazwa węzła" textFill="#2693ff">
-                           <font>
-                              <Font name="System Bold" size="18.0" />
-                           </font>
-                           <HBox.margin>
-                              <Insets left="119.0" top="25.0" />
-                           </HBox.margin>
-                        </Label>
-                        <TextField prefWidth="200.0">
-                           <HBox.margin>
-                              <Insets left="20.0" top="28.0" />
-                           </HBox.margin>
-                        </TextField>
-                        <Button mnemonicParsing="false" style="-fx-background-color: #2693ff;" text="Zatwierdź">
-                           <HBox.margin>
-                              <Insets left="20.0" top="28.0" />
-                           </HBox.margin>
+                        <HBox prefHeight="80.0" prefWidth="200.0">
+                           <children>
+                              <Label fx:id="idLabel" alignment="CENTER" prefWidth="40.0" textFill="#2693ff">
+                                 <font>
+                                    <Font name="System Bold" size="16.0" />
+                                 </font>
+                                 <HBox.margin>
+                                    <Insets left="10.0" top="25.0" />
+                                 </HBox.margin>
+                              </Label>
+                              <Label fx:id="objectName1Label" alignment="CENTER" prefWidth="180.0" textFill="#2693ff">
+                                 <font>
+                                    <Font name="System Bold" size="16.0" />
+                                 </font>
+                                 <HBox.margin>
+                                    <Insets left="10.0" top="25.0" />
+                                 </HBox.margin>
+                              </Label>
+                              <TextField fx:id="nodeField" prefWidth="200.0" promptText="Nazwa węzła">
+                                 <HBox.margin>
+                                    <Insets left="10.0" top="28.0" />
+                                 </HBox.margin>
+                              </TextField>
+                              <Label fx:id="objectName2Label" alignment="CENTER" prefWidth="180.0" textFill="#2693ff">
+                                 <font>
+                                    <Font name="System Bold" size="16.0" />
+                                 </font>
+                                 <HBox.margin>
+                                    <Insets left="10.0" top="25.0" />
+                                 </HBox.margin>
+                              </Label>
+                           </children>
+                        </HBox>
+                        <Button alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#editRelation" style="-fx-background-color: #2693ff;" text="Zatwierdź">
                            <font>
                               <Font name="System Bold" size="12.0" />
                            </font>
+                           <VBox.margin>
+                              <Insets />
+                           </VBox.margin>
                         </Button>
                      </children>
-                  </HBox>
+                  </VBox>
                </children></VBox>
          </children>
       </HBox>
