@@ -1,36 +1,34 @@
 package org.example.DTO;
 
-import com.google.common.collect.ArrayListMultimap;
-import com.google.common.collect.Multimap;
-
-import java.util.HashMap;
-import java.util.Map;
+import java.util.LinkedHashMap;
 
 public class Document {
 
     private Integer id;
+    private String relationName;
+    private LinkedHashMap<String, String> mapOfRelationValues = new LinkedHashMap <>();
     private String nodeName;
-    private String edgeName;
     private Integer joinId;
-    private String edgeJoinName;
+    private String nodeJoinName;
     private String type;
-    private Multimap<String, String> mapOfValues = ArrayListMultimap.create();
+    private LinkedHashMap<String, String> mapOfNodeValues = new LinkedHashMap <>();
 
-    public Document(Integer id, String nodeName, String edgeName, Integer joinId, String edgeJoinName, String type, Multimap<String, String> mapOfValues) {
+    public Document(Integer id, String relationName, LinkedHashMap<String, String> mapOfRelationValues,  String nodeName, Integer joinId, String nodeJoinName, String type, LinkedHashMap<String, String> mapOfNodeValues) {
         this.id = id;
+        this.relationName = relationName;
+        this.mapOfRelationValues = mapOfRelationValues;
         this.nodeName = nodeName;
-        this.edgeName = edgeName;
         this.joinId = joinId;
-        this.edgeJoinName = edgeJoinName;
+        this.nodeJoinName = nodeJoinName;
         this.type = type;
-        this.mapOfValues = mapOfValues;
+        this.mapOfNodeValues = mapOfNodeValues;
     }
 
     public Document(Integer id, String edgeJoinName, String nodeName, String edgeName ) {
         this.id = id;
-        this.edgeJoinName = edgeJoinName;
-        this.nodeName = nodeName;
-        this.edgeName = edgeName;
+        this.nodeJoinName = edgeJoinName;
+        this.relationName = nodeName;
+        this.nodeName = edgeName;
     }
 
     public Document() {
@@ -44,20 +42,28 @@ public class Document {
         this.id = id;
     }
 
+    public String getRelationName() {
+        return relationName;
+    }
+
+    public void setRelationName(String relationName) {
+        this.relationName = relationName;
+    }
+
+    public LinkedHashMap<String, String> getMapOfRelationValues() {
+        return mapOfRelationValues;
+    }
+
+    public void setMapOfRelationValues(LinkedHashMap<String, String> mapOfRelationValues) {
+        this.mapOfRelationValues = mapOfRelationValues;
+    }
+
     public String getNodeName() {
         return nodeName;
     }
 
     public void setNodeName(String nodeName) {
         this.nodeName = nodeName;
-    }
-
-    public String getEdgeName() {
-        return edgeName;
-    }
-
-    public void setEdgeName(String edgeName) {
-        this.edgeName = edgeName;
     }
 
     public Integer getJoinId() {
@@ -68,12 +74,12 @@ public class Document {
         this.joinId = joinId;
     }
 
-    public String getEdgeJoinName() {
-        return edgeJoinName;
+    public String getNodeJoinName() {
+        return nodeJoinName;
     }
 
-    public void setEdgeJoinName(String edgeJoinName) {
-        this.edgeJoinName = edgeJoinName;
+    public void setNodeJoinName(String nodeJoinName) {
+        this.nodeJoinName = nodeJoinName;
     }
 
     public String getType() {
@@ -84,11 +90,11 @@ public class Document {
         this.type = type;
     }
 
-    public Multimap<String, String> getMapOfValues() {
-        return mapOfValues;
+    public LinkedHashMap<String, String> getMapOfNodeValues() {
+        return mapOfNodeValues;
     }
 
-    public void setMapOfValues(Multimap<String, String> mapOfValues) {
-        this.mapOfValues = mapOfValues;
+    public void setMapOfNodeValues(LinkedHashMap<String, String> mapOfNodeValues) {
+        this.mapOfNodeValues = mapOfNodeValues;
     }
 }

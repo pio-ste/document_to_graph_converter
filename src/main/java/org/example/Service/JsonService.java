@@ -37,11 +37,11 @@ public class JsonService {
         JSONArray jsonArray = new JSONArray(json_str);
         int length = jsonArray.length();
         for(int i=0; i<length; i++) {
-            Multimap<String, String> mapOfKeyValuesDocument = ArrayListMultimap.create();
+            LinkedHashMap<String, String> mapOfKeyValuesDocument = new LinkedHashMap<>();
             JSONObject jsonObject = jsonArray.getJSONObject(i);
 
             Iterator<String> keys = jsonObject.keys();
-            System.out.println("/////////////////Nowy obiekt////////////////////");
+            //System.out.println("/////////////////Nowy obiekt////////////////////");
             counter ++;
             isArray = true;
             mapOfObjectID.put(counter, fileName);
@@ -51,67 +51,67 @@ public class JsonService {
             }
 
             addElementsIntoMap(mapOfKeyValuesDocument, "Object");
-            //documentObjects.add(new Document(mapOfObjectID.lastKey(), "", mapOfObjectID.lastEntry().getValue(), 0, "", "Object", mapOfKeyValuesDocument));
             mapOfObjectID.clear();
         }
         System.out.println(mapOfDocuments);
         return mapOfDocuments;
     }
 
-    public void jsonConditions(String key, JSONObject jsonObject, Multimap<String, String> mapOfKeyValuesDocument){
+    public void jsonConditions(String key, JSONObject jsonObject, LinkedHashMap<String, String> mapOfKeyValuesDocument){
         if (jsonObject.get(key) instanceof JSONObject) {
             getJsonObject(key, jsonObject);
         } else if (jsonObject.get(key) instanceof JSONArray) {
             getJsonArray(key, jsonObject);
         } else {
-            System.out.println("key is = "+key+" ==> value is = "+jsonObject.get(key));
+            //System.out.println("key is = "+key+" ==> value is = "+jsonObject.get(key));
             mapOfKeyValuesDocument.put(key, jsonObject.get(key).toString());
         }
     }
 
     public void getJsonObject(String key, JSONObject jsonObject){
-        System.out.println("Obiekt " + key);
+        //System.out.println("Obiekt " + key);
         counter ++;
         mapOfObjectID.put(counter, key);
-        Multimap<String, String> mapOfKeyValuesDocument = ArrayListMultimap.create();
+        LinkedHashMap<String, String> mapOfKeyValuesDocument = new LinkedHashMap<>();
         JSONObject jsonObjectOfObject = jsonObject.getJSONObject(key);
         for (int j=0; j<jsonObjectOfObject.names().length(); j++){
             if((jsonObjectOfObject.get(jsonObjectOfObject.names().getString(j)) instanceof JSONObject) || (jsonObjectOfObject.get(jsonObjectOfObject.names().getString(j)) instanceof JSONArray)) {
                 jsonConditions(jsonObjectOfObject.names().getString(j), jsonObjectOfObject, mapOfKeyValuesDocument);
             } else {
-                System.out.println("object key is = "+jsonObjectOfObject.names().getString(j)+" ==> value is = "+jsonObjectOfObject.get(jsonObjectOfObject.names().getString(j)));
+                //System.out.println("object key is = "+jsonObjectOfObject.names().getString(j)+" ==> value is = "+jsonObjectOfObject.get(jsonObjectOfObject.names().getString(j)));
                 mapOfKeyValuesDocument.put(jsonObjectOfObject.names().getString(j), jsonObjectOfObject.get(jsonObjectOfObject.names().getString(j)).toString());
             }
         }
         addElementsIntoMap(mapOfKeyValuesDocument, "Object");
-        System.out.println("Obiekt koniec");
+        //System.out.println("Obiekt koniec");
     }
 
 
 
     public void getJsonArray(String key, JSONObject jsonObject){
-        System.out.println("Tablica");
+        //System.out.println("Tablica");
         JSONArray jsonArrayOfArray = jsonObject.getJSONArray(key);
-        Multimap<String, String> mapOfKeyValuesDocument = ArrayListMultimap.create();
+        LinkedHashMap<String, String> mapOfKeyValuesDocument = new LinkedHashMap<>();
         for (int k=0; k<jsonArrayOfArray.length(); k++){
             if (!(jsonArrayOfArray.get(k) instanceof JSONObject)){
-                System.out.println("KEY TABLICA " + key + " WARTOSC  " + jsonArrayOfArray.get(k));
-                mapOfKeyValuesDocument.put(key, jsonArrayOfArray.get(k).toString());
+                //System.out.println("KEY TABLICA " + key + " WARTOSC  " + jsonArrayOfArray.get(k));
+                mapOfKeyValuesDocument.put(String.valueOf(k), jsonArrayOfArray.get(k).toString());
             } else {
                 counter ++;
                 mapOfObjectID.put(counter, key);
                 isArray = false;
-                Multimap<String, String> mapOfKeyValuesDocumentArray = ArrayListMultimap.create();
+                LinkedHashMap<String, String> mapOfKeyValuesDocumentArray = new LinkedHashMap<>();
+                //Multimap<String, String> mapOfKeyValuesDocumentArray = ArrayListMultimap.create();
                 JSONObject jsonObjectOfArray = jsonArrayOfArray.getJSONObject(k);
                 Iterator<String> arrayKeys = jsonObjectOfArray.keys();
-                System.out.println("Nowy obiekt tablicy");
+                //System.out.println("Nowy obiekt tablicy");
                 while (arrayKeys.hasNext()){
                     String keyArray = arrayKeys.next();
                     if((jsonObjectOfArray.get(keyArray) instanceof JSONArray) || (jsonObjectOfArray.get(keyArray) instanceof JSONObject)) {
                         isArray = true;
                         jsonConditions(keyArray, jsonObjectOfArray, mapOfKeyValuesDocumentArray);
                     } else {
-                        System.out.println("key Obiekt tablicy = "+keyArray+" ==> value is = "+jsonObjectOfArray.get(keyArray));
+                        //System.out.println("key Obiekt tablicy = "+keyArray+" ==> value is = "+jsonObjectOfArray.get(keyArray));
                         mapOfKeyValuesDocumentArray.put(keyArray, jsonObjectOfArray.get(keyArray).toString());
                     }
                 }
@@ -123,11 +123,12 @@ public class JsonService {
             mapOfObjectID.put(counter, key);
             addElementsIntoMap(mapOfKeyValuesDocument, "Array");
         }
-        System.out.println("Tablica koniec");
+        //System.out.println("Tablica koniec");
         isArray = true;
     }
 
-    public void addElementsIntoMap(Multimap<String, String> mapOfKeyValuesDocument, String type) {
+    public void addElementsIntoMap(LinkedHashMap<String, String> mapOfKeyValuesDocument, String type) {
+        LinkedHashMap<String, String> mapOfRelationValues = new LinkedHashMap<>();
         edgeID = mapOfObjectID.lastKey();
         edgeName = mapOfObjectID.lastEntry().getValue();
         mapOfObjectID.remove(edgeID);
@@ -139,8 +140,7 @@ public class JsonService {
             joinEdgeName = mapOfObjectID.lastEntry().getValue();
 
         }
-        mapOfDocuments.put(edgeID, new Document(edgeID, null, edgeName, joinEdgeID, joinEdgeName, type, mapOfKeyValuesDocument));
-        //documentObjects.add(new Document(edgeID, null, edgeName, joinEdgeID, joinEdgeName, type, mapOfKeyValuesDocument));
+        mapOfDocuments.put(edgeID, new Document(edgeID, null, mapOfRelationValues, edgeName, joinEdgeID, joinEdgeName, type, mapOfKeyValuesDocument));
     }
 
     public String readFileAsString(String filePath) throws Exception

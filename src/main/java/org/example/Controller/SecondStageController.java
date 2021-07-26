@@ -1,8 +1,7 @@
 package org.example.Controller;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -20,6 +19,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import org.example.DTO.Document;
+import org.example.Service.CypherService;
 import org.example.Service.JsonService;
 
 public class SecondStageController {
@@ -52,7 +52,13 @@ public class SecondStageController {
     private Label objectName2Label;
 
     @FXML
-    private TextField nodeField;
+    private TextField relationField;
+
+    @FXML
+    private TextField relationParameterField;
+
+    @FXML
+    private TextField relationValueField;
 
     public String filePath;
     public String catalogPath;
@@ -86,9 +92,9 @@ public class SecondStageController {
 
     public void setTableView() {
         idColumn.setCellValueFactory(new PropertyValueFactory<>("Id"));
-        object1Column.setCellValueFactory(new PropertyValueFactory<>("EdgeJoinName"));
-        relationColumn.setCellValueFactory(new PropertyValueFactory<>("NodeName"));
-        object2Column.setCellValueFactory(new PropertyValueFactory<>("EdgeName"));
+        object1Column.setCellValueFactory(new PropertyValueFactory<>("NodeJoinName"));
+        relationColumn.setCellValueFactory(new PropertyValueFactory<>("RelationName"));
+        object2Column.setCellValueFactory(new PropertyValueFactory<>("NodeName"));
         tableRelations.setItems(observableList());
     }
 
@@ -97,7 +103,7 @@ public class SecondStageController {
         for (Map.Entry<Integer, Document> documentEntry: documentObjects.entrySet()) {
             Document document = documentEntry.getValue();
             if (document.getJoinId() != null && document.getType().equals("Object")){
-                documents.add(new Document(document.getId(), document.getEdgeJoinName(), document.getNodeName(), document.getEdgeName()));
+                documents.add(new Document(document.getId(), document.getNodeJoinName(), document.getRelationName(), document.getNodeName()));
             }
         }
         return documents;
@@ -107,12 +113,14 @@ public class SecondStageController {
 
     @FXML
     private void nextStep(ActionEvent actionEvent) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/example/FXML/thirdStage.fxml"));
+        CypherService cypherService = new CypherService();
+        cypherService.convert(documentObjects);
+        /*FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/example/FXML/thirdStage.fxml"));
         Parent root = loader.load();
         Scene scene = new Scene(root);
         Stage stage = (Stage)((Node)actionEvent.getSource()).getScene().getWindow();
         stage.setScene(scene);
-        stage.show();
+        stage.show();*/
     }
 
     @FXML
@@ -127,11 +135,20 @@ public class SecondStageController {
 
     @FXML
     public void editRelation(ActionEvent event) {
-        String nodeName = nodeField.getText();
+        /*String nodeName = nodeField.getText();
+        String nodeParameter = nodeParameterField.getText();
+        String nodeValue = nodeValueField.getText();*/
         Integer idEdge = Integer.parseInt(idLabel.getText());
         Document document;
+        LinkedHashMap<String, String> mapOfRelationValues = new LinkedHashMap<>();
         document = documentObjects.get(idEdge);
-        document.setNodeName(nodeName);
+        document.setRelationName(relationField.getText());
+        if (!relationParameterField.getText().isEmpty() || !relationValueField.getText().isEmpty()){
+            System.out.println("jest");
+            mapOfRelationValues = document.getMapOfRelationValues();
+            mapOfRelationValues.put(relationParameterField.getText(), relationValueField.getText());
+            document.setMapOfRelationValues(mapOfRelationValues);
+        }
         documentObjects.put(idEdge, document);
         System.out.println("");
         setTableView();
@@ -146,8 +163,11 @@ public class SecondStageController {
             objectName2Label.setText("-");
         } else {
             idLabel.setText(document.getId().toString());
-            objectName1Label.setText(document.getEdgeJoinName());
-            objectName2Label.setText(document.getEdgeName());
+            objectName1Label.setText(document.getNodeJoinName());
+            objectName2Label.setText(document.getNodeName());
+            relationField.setText(document.getRelationName());
+            relationParameterField.setText("");
+            relationValueField.setText("");
         }
     }
 }

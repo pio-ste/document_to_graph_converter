@@ -144,7 +144,7 @@
                   </TableView>
                   <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0">
                      <children>
-                        <HBox prefHeight="80.0" prefWidth="200.0">
+                        <HBox prefHeight="60.0" prefWidth="200.0">
                            <children>
                               <Label fx:id="idLabel" alignment="CENTER" prefWidth="40.0" textFill="#2693ff">
                                  <font>
@@ -162,7 +162,7 @@
                                     <Insets left="10.0" top="25.0" />
                                  </HBox.margin>
                               </Label>
-                              <TextField fx:id="nodeField" prefWidth="200.0" promptText="Nazwa węzła">
+                              <TextField fx:id="relationField" prefWidth="200.0" promptText="Nazwa węzła">
                                  <HBox.margin>
                                     <Insets left="10.0" top="28.0" />
                                  </HBox.margin>
@@ -175,6 +175,36 @@
                                     <Insets left="10.0" top="25.0" />
                                  </HBox.margin>
                               </Label>
+                           </children>
+                        </HBox>
+                        <HBox prefHeight="62.0" prefWidth="200.0">
+                           <children>
+                              <Label text="Parametr" textFill="#2693ff">
+                                 <font>
+                                    <Font name="System Bold" size="16.0" />
+                                 </font>
+                                 <HBox.margin>
+                                    <Insets left="24.0" top="15.0" />
+                                 </HBox.margin>
+                              </Label>
+                              <TextField fx:id="relationParameterField" prefWidth="200.0">
+                                 <HBox.margin>
+                                    <Insets left="10.0" top="15.0" />
+                                 </HBox.margin>
+                              </TextField>
+                              <Label text="Wartość" textFill="#2693ff">
+                                 <font>
+                                    <Font name="System Bold" size="16.0" />
+                                 </font>
+                                 <HBox.margin>
+                                    <Insets left="80.0" top="15.0" />
+                                 </HBox.margin>
+                              </Label>
+                              <TextField fx:id="relationValueField" prefWidth="200.0">
+                                 <HBox.margin>
+                                    <Insets left="10.0" top="15.0" />
+                                 </HBox.margin>
+                              </TextField>
                            </children>
                         </HBox>
                         <Button alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#editRelation" style="-fx-background-color: #2693ff;" text="Zatwierdź">
