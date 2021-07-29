@@ -1,6 +1,8 @@
 package org.example.Controller;
 
 import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.TreeMap;
@@ -61,6 +63,7 @@ public class SecondStageController {
     private TextField relationValueField;
 
     public String filePath;
+    public String fileName;
     public String catalogPath;
     public String jsonContent;
     private TreeMap<Integer, Document> documentObjects = new TreeMap<>();
@@ -69,6 +72,9 @@ public class SecondStageController {
     public void setPath(String filePathField, String catalogPathField){
         filePath = filePathField;
         catalogPath = catalogPathField;
+        Path path = Paths.get(filePath);
+        Path file = path.getFileName();
+        fileName = file.toString().replaceFirst("[.][^.]+$", "");
     }
 
     @FXML
@@ -77,7 +83,7 @@ public class SecondStageController {
         Platform.runLater(() -> {
             JsonService jsonService = new JsonService();
             try {
-                jsonContent = jsonService.readFileAsString(filePath);
+                jsonContent = jsonService.readFileAsString(filePath, fileName);
                 jsonContentTextField.setText(jsonContent);
                 documentObjects = jsonService.iterateOverJson(jsonContent);
                 setTableView();
@@ -85,8 +91,6 @@ public class SecondStageController {
                 e.printStackTrace();
             }
         });
-
-
     }
 
 
@@ -114,7 +118,7 @@ public class SecondStageController {
     @FXML
     private void nextStep(ActionEvent actionEvent) throws IOException {
         CypherService cypherService = new CypherService();
-        cypherService.convert(documentObjects);
+        cypherService.convert(documentObjects, catalogPath, fileName);
         /*FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/example/FXML/thirdStage.fxml"));
         Parent root = loader.load();
         Scene scene = new Scene(root);
@@ -135,16 +139,12 @@ public class SecondStageController {
 
     @FXML
     public void editRelation(ActionEvent event) {
-        /*String nodeName = nodeField.getText();
-        String nodeParameter = nodeParameterField.getText();
-        String nodeValue = nodeValueField.getText();*/
         Integer idEdge = Integer.parseInt(idLabel.getText());
         Document document;
         LinkedHashMap<String, String> mapOfRelationValues = new LinkedHashMap<>();
         document = documentObjects.get(idEdge);
         document.setRelationName(relationField.getText());
         if (!relationParameterField.getText().isEmpty() || !relationValueField.getText().isEmpty()){
-            System.out.println("jest");
             mapOfRelationValues = document.getMapOfRelationValues();
             mapOfRelationValues.put(relationParameterField.getText(), relationValueField.getText());
             document.setMapOfRelationValues(mapOfRelationValues);

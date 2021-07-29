@@ -2,18 +2,35 @@ package org.example.Service;
 
 import org.example.DTO.Document;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Locale;
 import java.util.Map;
 import java.util.TreeMap;
 
 public class CypherService {
 
-    public void convert(TreeMap<Integer, Document> documentObjects){
-        createNodes(documentObjects);
-        createRelations(documentObjects);
+    public void convert(TreeMap<Integer, Document> documentObjects, String catalogPath, String fileName){
+        catalogPath = catalogPath.replace("\\", "/");
+        String path = catalogPath+"/create_"+fileName+".cypher";
+        createFile(path);
+        writeIntoFile(documentObjects, path);
     }
 
-    private void createNodes(TreeMap<Integer, Document> documentObjects){
+    private void writeIntoFile(TreeMap<Integer, Document> documentObjects, String path){
+        try {
+            FileWriter writer = new FileWriter(path, true);
+            createNodes(documentObjects, writer);
+            createRelations(documentObjects, writer);
+            writer.write(";");
+            writer.close();
+        } catch (IOException e) {
+            System.out.println("Błąd podczas zapisywania do pliku.");
+            e.printStackTrace();
+        }
+    }
+    private void createNodes(TreeMap<Integer, Document> documentObjects, FileWriter writer) throws IOException {
         for (Map.Entry<Integer, Document> documentEntry : documentObjects.entrySet()) {
             Document document = documentEntry.getValue();
             boolean hasValues = false;
@@ -43,12 +60,13 @@ public class CypherService {
                 } else {
                     queryNode.append(")");
                 }
-                System.out.println(queryNode);
+                writer.write(String.valueOf(queryNode));
+                writer.append("\n");
             }
         }
     }
 
-    private void createRelations(TreeMap<Integer, Document> documentObjects){
+    private void createRelations(TreeMap<Integer, Document> documentObjects, FileWriter writer) throws IOException {
         for (Map.Entry<Integer, Document> documentEntry : documentObjects.entrySet()) {
             boolean hasPair = false;
             Document document = documentEntry.getValue();
@@ -70,12 +88,12 @@ public class CypherService {
                             queryRelation = new StringBuilder(queryRelation.substring(0, queryRelation.length() - 2));
                             queryRelation.append("}").append("]->(").append(document.getNodeName()).append("_").append(document.getId().toString()).append("),");;
                         }
-
                     }
                 }
                 if (hasPair){
                     queryRelation = new StringBuilder(queryRelation.substring(0, queryRelation.length() - 1));
-                    System.out.println(queryRelation);
+                    writer.append("\n");
+                    writer.write(String.valueOf(queryRelation));
                 }
             }
         }
@@ -101,5 +119,19 @@ public class CypherService {
             return false;
         }
         return true;
+    }
+
+    private void createFile(String path){
+        try {
+            File file = new File(path);
+            if (file.createNewFile()) {
+                System.out.println("Plik: " + file.getName());
+            } else {
+                System.out.println("Plik już istnieje.");
+            }
+        } catch (IOException e) {
+            System.out.println("Wystąpił błąd.");
+            e.printStackTrace();
+        }
     }
 }
