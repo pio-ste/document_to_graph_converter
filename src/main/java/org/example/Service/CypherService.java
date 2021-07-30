@@ -5,15 +5,15 @@ import org.example.DTO.Document;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Locale;
 import java.util.Map;
 import java.util.TreeMap;
 
 public class CypherService {
 
-    public void convert(TreeMap<Integer, Document> documentObjects, String catalogPath, String fileName){
-        catalogPath = catalogPath.replace("\\", "/");
-        String path = catalogPath+"/create_"+fileName+".cypher";
+    public void convert(TreeMap<Integer, Document> documentObjects, String path){
         createFile(path);
         writeIntoFile(documentObjects, path);
     }
@@ -83,7 +83,7 @@ public class CypherService {
                         } else {
                             queryRelation.append(" {");
                             for (Map.Entry<String, String> valuesEntry : documentRelation.getMapOfRelationValues().entrySet()){
-                                queryRelation.append(valuesEntry.getKey()).append("[").append(writeNumberOrString(valuesEntry.getValue())).append("], ");
+                                queryRelation.append(valuesEntry.getKey()).append(":[").append(writeNumberOrString(valuesEntry.getValue())).append("], ");
                             }
                             queryRelation = new StringBuilder(queryRelation.substring(0, queryRelation.length() - 2));
                             queryRelation.append("}").append("]->(").append(document.getNodeName()).append("_").append(document.getId().toString()).append("),");;
@@ -127,11 +127,23 @@ public class CypherService {
             if (file.createNewFile()) {
                 System.out.println("Plik: " + file.getName());
             } else {
+                FileWriter writer = new FileWriter(path);
+                writer.write("");
+                writer.close();
                 System.out.println("Plik już istnieje.");
             }
         } catch (IOException e) {
-            System.out.println("Wystąpił błąd.");
+            System.out.println("Wystąpił błąd podczas tworzenia pliku.");
             e.printStackTrace();
         }
+    }
+
+    public String changePath(String directory, String fileName){
+        directory = directory.replace("\\", "/");
+        return directory+"/create_"+fileName+".cypher";
+    }
+
+    public String readFile(String path) throws IOException {
+        return new String(Files.readAllBytes(Paths.get(path)));
     }
 }

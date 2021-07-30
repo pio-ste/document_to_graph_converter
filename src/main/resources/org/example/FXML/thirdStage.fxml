@@ -19,7 +19,7 @@
          <children>
             <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="75.0">
                <children>
-                  <Button mnemonicParsing="false" onAction="#previousStep" prefWidth="70.0" style="-fx-background-color: #2693ff;">
+                  <Button mnemonicParsing="false" onAction="#firstStep" prefWidth="70.0" style="-fx-background-color: #2693ff;">
                      <graphic>
                         <ImageView fitHeight="28.0" fitWidth="28.0" nodeOrientation="RIGHT_TO_LEFT" pickOnBounds="true" preserveRatio="true">
                            <image>
@@ -90,7 +90,7 @@
                   <Insets top="20.0" />
                </VBox.margin>
             </Label>
-            <TextArea prefHeight="678.0" prefWidth="200.0">
+            <TextArea fx:id="queryTextArea" prefHeight="678.0" prefWidth="200.0">
                <VBox.margin>
                   <Insets bottom="5.0" left="200.0" right="200.0" top="10.0" />
                </VBox.margin>

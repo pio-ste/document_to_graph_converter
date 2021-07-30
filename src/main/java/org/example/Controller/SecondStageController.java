@@ -62,10 +62,10 @@ public class SecondStageController {
     @FXML
     private TextField relationValueField;
 
-    public String filePath;
-    public String fileName;
-    public String catalogPath;
-    public String jsonContent;
+    private String filePath;
+    private String fileName;
+    private String catalogPath;
+    private String jsonContent;
     private TreeMap<Integer, Document> documentObjects = new TreeMap<>();
 
     @FXML
@@ -117,14 +117,14 @@ public class SecondStageController {
 
     @FXML
     private void nextStep(ActionEvent actionEvent) throws IOException {
-        CypherService cypherService = new CypherService();
-        cypherService.convert(documentObjects, catalogPath, fileName);
-        /*FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/example/FXML/thirdStage.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/example/FXML/thirdStage.fxml"));
         Parent root = loader.load();
+        ThirdStageController thirdStageController = loader.getController();
+        thirdStageController.setPath(documentObjects, catalogPath, fileName);
         Scene scene = new Scene(root);
         Stage stage = (Stage)((Node)actionEvent.getSource()).getScene().getWindow();
         stage.setScene(scene);
-        stage.show();*/
+        stage.show();
     }
 
     @FXML
@@ -150,7 +150,6 @@ public class SecondStageController {
             document.setMapOfRelationValues(mapOfRelationValues);
         }
         documentObjects.put(idEdge, document);
-        System.out.println("");
         setTableView();
     }
 

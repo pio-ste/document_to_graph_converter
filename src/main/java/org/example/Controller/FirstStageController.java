@@ -9,7 +9,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
@@ -26,7 +25,8 @@ public class FirstStageController {
     @FXML
     private void nextStep(ActionEvent actionEvent) throws IOException {
         if(directoryFileField.getText().equals("")){
-            errorWindow("Aby przejść dalej upewnij się, że wybrany jest plik oraz katalog!!!");
+            ErrorWindowController errorWindowController = new ErrorWindowController();
+            errorWindowController.errorWindow("Aby przejść dalej upewnij się, że wybrany jest plik oraz katalog!!!");
         } else {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/example/FXML/secondStage.fxml"));
             Parent root = loader.load();
@@ -46,17 +46,12 @@ public class FirstStageController {
         if(file != null){
             directoryFileField.setText(file.getAbsolutePath());
         } else {
-            errorWindow("Wystapił błąd w wyborze pliku. Spróbuj ponownie.");
+            ErrorWindowController errorWindowController = new ErrorWindowController();
+            errorWindowController.errorWindow("Wystapił błąd w wyborze pliku. Spróbuj ponownie.");
         }
     }
 
-    public void errorWindow(String errorType) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle("Error");
-        alert.setHeaderText("Wystąpił błąd");
-        alert.setContentText(errorType);
-        alert.showAndWait();
-    }
+
 
     public void selectDirectory(ActionEvent event) {
         DirectoryChooser directoryChooser = new DirectoryChooser();
@@ -65,7 +60,8 @@ public class FirstStageController {
         if(selectedDirectory != null){
             directoryCatalogField.setText(selectedDirectory.getAbsolutePath());
         }else{
-            errorWindow("Wystapił błąd w wyborze ściezki. Spróbuj ponownie.");
+            ErrorWindowController errorWindowController = new ErrorWindowController();
+            errorWindowController.errorWindow("Wystapił błąd w wyborze ściezki. Spróbuj ponownie.");
         }
     }
 }

@@ -43,7 +43,6 @@ public class JsonService {
             addElementsIntoMap(mapOfKeyValuesDocument, "Object");
             mapOfObjectID.clear();
         }
-        System.out.println(mapOfDocuments);
         return mapOfDocuments;
     }
 
@@ -121,8 +120,7 @@ public class JsonService {
         mapOfDocuments.put(edgeID, new Document(edgeID, null, mapOfRelationValues, edgeName, joinEdgeID, joinEdgeName, type, mapOfKeyValuesDocument));
     }
 
-    public String readFileAsString(String filePath, String file) throws Exception
-    {
+    public String readFileAsString(String filePath, String file) throws Exception {
         fileName = file;
         return new String(Files.readAllBytes(Paths.get(filePath)));
     }
