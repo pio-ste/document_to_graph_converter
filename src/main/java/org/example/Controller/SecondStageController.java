@@ -149,8 +149,22 @@ public class SecondStageController {
             mapOfRelationValues.put(relationParameterField.getText(), relationValueField.getText());
             document.setMapOfRelationValues(mapOfRelationValues);
         }
-        documentObjects.put(idEdge, document);
-        setTableView();
+        if (relationField.getText() == null){
+            ErrorWindowController errorWindowController = new ErrorWindowController();
+            errorWindowController.errorWindow("Wypełnij pole nazwa relacji !!!");
+        }
+        if (relationParameterField.getText().equals("") && !relationValueField.getText().isEmpty()){
+            ErrorWindowController errorWindowController = new ErrorWindowController();
+            errorWindowController.errorWindow("Wypełnij pola z parametrem relacji !!!");
+        }
+        if (!relationParameterField.getText().isEmpty() && relationValueField.getText().isEmpty()){
+            ErrorWindowController errorWindowController = new ErrorWindowController();
+            errorWindowController.errorWindow("Wypełnij pola z wartością relacji !!!");
+        }
+        if ((!relationParameterField.getText().isEmpty() || !relationValueField.getText().isEmpty()) || !relationField.getText().isEmpty()){
+            documentObjects.put(idEdge, document);
+            setTableView();
+        }
     }
 
     @FXML

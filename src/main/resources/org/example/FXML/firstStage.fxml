@@ -82,27 +82,121 @@
    <center>
       <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
          <children>
-            <Label alignment="CENTER" contentDisplay="CENTER" text="Wybierz plik .json do konwersji" textFill="#2693ff">
-               <font>
-                  <Font name="System Bold" size="22.0" />
-               </font>
-               <VBox.margin>
-                  <Insets top="100.0" />
-               </VBox.margin>
-            </Label>
-            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+            <HBox alignment="TOP_CENTER">
                <children>
-                  <Button mnemonicParsing="false" onAction="#selectFile" prefWidth="125.0" style="-fx-background-color: #2693ff;" text="Wybierz plik...">
-                     <font>
-                        <Font name="System Bold" size="12.0" />
-                     </font>
-                  </Button>
-                  <TextField fx:id="directoryFileField" editable="false" prefWidth="300.0">
+                  <VBox alignment="CENTER" minWidth="420.0">
+                     <children>
+                        <Label alignment="CENTER" contentDisplay="CENTER" text="Pobierz dane z MongoDB" textFill="#2693ff">
+                           <font>
+                              <Font name="System Bold" size="22.0" />
+                           </font>
+                        </Label>
+                        <HBox>
+                           <VBox.margin>
+                              <Insets top="10.0" />
+                           </VBox.margin>
+                           <children>
+                              <VBox prefHeight="200.0">
+                                 <children>
+                                    <Label text="Adres URI" textFill="#2693ff">
+                                       <font>
+                                          <Font name="System Bold" size="16.0" />
+                                       </font>
+                                       <VBox.margin>
+                                          <Insets top="10.0" />
+                                       </VBox.margin>
+                                    </Label>
+                                    <Label text="Nazwa bazy" textFill="#2693ff">
+                                       <font>
+                                          <Font name="System Bold" size="16.0" />
+                                       </font>
+                                       <VBox.margin>
+                                          <Insets top="20.0" />
+                                       </VBox.margin>
+                                    </Label>
+                                    <Label text="Nazwa kolekcji" textFill="#2693ff">
+                                       <font>
+                                          <Font name="System Bold" size="16.0" />
+                                       </font>
+                                       <VBox.margin>
+                                          <Insets top="20.0" />
+                                       </VBox.margin>
+                                    </Label>
+                                 </children>
+                              </VBox>
+                              <VBox prefHeight="200.0">
+                                 <children>
+                                    <TextField fx:id="urlField" prefWidth="350.0">
+                                       <VBox.margin>
+                                          <Insets top="10.0" />
+                                       </VBox.margin>
+                                    </TextField>
+                                    <TextField fx:id="databaseNameField" prefWidth="250.0">
+                                       <VBox.margin>
+                                          <Insets top="20.0" />
+                                       </VBox.margin>
+                                    </TextField>
+                                    <TextField fx:id="collectionField">
+                                       <VBox.margin>
+                                          <Insets top="20.0" />
+                                       </VBox.margin>
+                                    </TextField>
+                                 </children>
+                                 <HBox.margin>
+                                    <Insets left="20.0" />
+                                 </HBox.margin>
+                              </VBox>
+                           </children>
+                        </HBox>
+                     </children>
                      <HBox.margin>
-                        <Insets left="40.0" />
+                        <Insets right="10.0" />
                      </HBox.margin>
-                  </TextField>
+                  </VBox>
+                  <VBox alignment="TOP_CENTER">
+                     <children>
+                        <Label alignment="CENTER" contentDisplay="CENTER" text="lub" textFill="#2693ff">
+                           <font>
+                              <Font name="System Bold" size="22.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets left="15.0" right="15.0" />
+                           </VBox.margin>
+                        </Label>
+                     </children>
+                  </VBox>
+                  <VBox alignment="TOP_CENTER" minWidth="420.0">
+                     <children>
+                        <Label alignment="CENTER" contentDisplay="CENTER" text="Pobierz dane z pliku .json" textFill="#2693ff">
+                           <font>
+                              <Font name="System Bold" size="22.0" />
+                           </font>
+                        </Label>
+                        <HBox alignment="CENTER">
+                           <children>
+                              <Button mnemonicParsing="false" onAction="#selectFile" prefWidth="125.0" style="-fx-background-color: #2693ff;" text="Wybierz plik ...">
+                                 <font>
+                                    <Font name="System Bold" size="12.0" />
+                                 </font>
+                              </Button>
+                              <TextField fx:id="directoryFileField" editable="false" prefWidth="350.0">
+                                 <HBox.margin>
+                                    <Insets left="40.0" />
+                                 </HBox.margin>
+                              </TextField>
+                           </children>
+                           <VBox.margin>
+                              <Insets top="19.0" />
+                           </VBox.margin>
+                        </HBox>
+                     </children>
+                     <HBox.margin>
+                        <Insets left="10.0" />
+                     </HBox.margin></VBox>
                </children>
+               <VBox.margin>
+                  <Insets top="50.0" />
+               </VBox.margin>
             </HBox>
             <Label text="Wybierz miejsce gdzie ma być zapisany plik .cypher" textFill="#2693ff">
                <font>
@@ -112,7 +206,7 @@
                   <Insets top="50.0" />
                </VBox.margin>
             </Label>
-            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+            <HBox alignment="CENTER" prefHeight="75.0" prefWidth="200.0">
                <children>
                   <Button mnemonicParsing="false" onAction="#selectDirectory" prefWidth="125.0" style="-fx-background-color: #2693ff;" text="Wybierz katalog...">
                      <font>
@@ -126,6 +220,7 @@
                   </TextField>
                </children>
             </HBox>
+            <Button mnemonicParsing="false" onAction="#getData" text="Button" />
          </children>
       </VBox>
    </center>

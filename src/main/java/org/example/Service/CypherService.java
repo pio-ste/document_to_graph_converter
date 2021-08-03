@@ -125,7 +125,7 @@ public class CypherService {
         try {
             File file = new File(path);
             if (file.createNewFile()) {
-                System.out.println("Plik: " + file.getName());
+                System.out.println(file.getName());
             } else {
                 FileWriter writer = new FileWriter(path);
                 writer.write("");
