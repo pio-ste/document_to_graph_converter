@@ -5,6 +5,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -13,7 +14,6 @@ import java.util.TreeMap;
 
 public class JsonService {
 
-    private String fileName;
     private String edgeName;
     private String joinEdgeName;
     private Integer edgeID;
@@ -24,7 +24,7 @@ public class JsonService {
     private TreeMap<Integer, String> mapOfObjectID = new TreeMap<>();
     private TreeMap<Integer, Document> mapOfDocuments = new TreeMap<>();
 
-    public TreeMap<Integer, Document> iterateOverJson(String json_str) {
+    public TreeMap<Integer, Document> iterateOverJson(String json_str, String documentName) {
         JSONArray jsonArray = new JSONArray(json_str);
         int length = jsonArray.length();
         for(int i=0; i<length; i++) {
@@ -34,7 +34,7 @@ public class JsonService {
             Iterator<String> keys = jsonObject.keys();
             counter ++;
             isArray = true;
-            mapOfObjectID.put(counter, fileName);
+            mapOfObjectID.put(counter, documentName);
             while(keys.hasNext()) {
                 String key = keys.next();
                 jsonConditions(key, jsonObject, mapOfKeyValuesDocument);
@@ -46,7 +46,7 @@ public class JsonService {
         return mapOfDocuments;
     }
 
-    public void jsonConditions(String key, JSONObject jsonObject, LinkedHashMap<String, String> mapOfKeyValuesDocument){
+    private void jsonConditions(String key, JSONObject jsonObject, LinkedHashMap<String, String> mapOfKeyValuesDocument){
         if (jsonObject.get(key) instanceof JSONObject) {
             getJsonObject(key, jsonObject);
         } else if (jsonObject.get(key) instanceof JSONArray) {
@@ -56,7 +56,7 @@ public class JsonService {
         }
     }
 
-    public void getJsonObject(String key, JSONObject jsonObject){
+    private void getJsonObject(String key, JSONObject jsonObject){
         counter ++;
         mapOfObjectID.put(counter, key);
         LinkedHashMap<String, String> mapOfKeyValuesDocument = new LinkedHashMap<>();
@@ -71,7 +71,7 @@ public class JsonService {
         addElementsIntoMap(mapOfKeyValuesDocument, "Object");
     }
 
-    public void getJsonArray(String key, JSONObject jsonObject){
+    private void getJsonArray(String key, JSONObject jsonObject){
         JSONArray jsonArrayOfArray = jsonObject.getJSONArray(key);
         LinkedHashMap<String, String> mapOfKeyValuesDocument = new LinkedHashMap<>();
         for (int k=0; k<jsonArrayOfArray.length(); k++){
@@ -104,7 +104,7 @@ public class JsonService {
         isArray = true;
     }
 
-    public void addElementsIntoMap(LinkedHashMap<String, String> mapOfKeyValuesDocument, String type) {
+    private void addElementsIntoMap(LinkedHashMap<String, String> mapOfKeyValuesDocument, String type) {
         LinkedHashMap<String, String> mapOfRelationValues = new LinkedHashMap<>();
         edgeID = mapOfObjectID.lastKey();
         edgeName = mapOfObjectID.lastEntry().getValue();
@@ -120,9 +120,16 @@ public class JsonService {
         mapOfDocuments.put(edgeID, new Document(edgeID, null, mapOfRelationValues, edgeName, joinEdgeID, joinEdgeName, type, mapOfKeyValuesDocument));
     }
 
-    public String readFileAsString(String filePath, String file) throws Exception {
-        fileName = file;
+    public String readFileAsString(String filePath) throws Exception {
         return new String(Files.readAllBytes(Paths.get(filePath)));
+    }
+
+    public String getFileName(String filePath) {
+        String name;
+        Path path = Paths.get(filePath);
+        Path file = path.getFileName();
+        name = file.toString().replaceFirst("[.][^.]+$", "");
+        return name;
     }
 
 }

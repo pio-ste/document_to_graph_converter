@@ -13,6 +13,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
@@ -28,6 +30,12 @@ public class FirstStageController {
     private TextField directoryCatalogField;
 
     @FXML
+    private Button selectJsonFileBtn;
+
+    @FXML
+    private Button getDataFromDBBtn;
+
+    @FXML
     private TextField urlField;
 
     @FXML
@@ -37,15 +45,37 @@ public class FirstStageController {
     private TextField collectionField;
 
     @FXML
+    private RadioButton dataFromMongoRadio;
+
+    @FXML
+    private RadioButton dataFromJsonRadio;
+
+    private String dataContent;
+
+    @FXML
+    public void initialize(){
+        dataFromMongoRadio.setSelected(true);
+        directoryFileField.setDisable(true);
+        directoryFileField.setText("");
+        selectJsonFileBtn.setDisable(true);
+        urlField.setDisable(false);
+        databaseNameField.setDisable(false);
+        collectionField.setDisable(false);
+        getDataFromDBBtn.setDisable(false);
+    }
+
+    @FXML
     private void nextStep(ActionEvent actionEvent) throws IOException {
-        if(directoryFileField.getText().equals("") || directoryCatalogField.getText().equals("")){
-            ErrorWindowController errorWindowController = new ErrorWindowController();
+        ErrorWindowController errorWindowController = new ErrorWindowController();
+        if(dataFromJsonRadio.isSelected() && (directoryFileField.getText().equals("") || directoryCatalogField.getText().equals(""))){
             errorWindowController.errorWindow("Aby przejść dalej upewnij się, że wybrany jest plik oraz katalog!!!");
+        } else if (dataFromMongoRadio.isSelected() && dataContent == null){
+            errorWindowController.errorWindow("Aby przejść dalej upewnij się, że pobrałeś dane z bazy MongoDB!!!");
         } else {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/example/FXML/secondStage.fxml"));
             Parent root = loader.load();
             SecondStageController secondController = loader.getController();
-            secondController.setPath(directoryFileField.getText(), directoryCatalogField.getText());
+            secondController.setPath(directoryFileField.getText(), directoryCatalogField.getText(), collectionField.getText(), dataContent, dataFromJsonRadio.isSelected());
             Scene scene = new Scene(root);
             Stage stage = (Stage)((Node)actionEvent.getSource()).getScene().getWindow();
             stage.setScene(scene);
@@ -81,13 +111,53 @@ public class FirstStageController {
 
     public void getData(ActionEvent event) {
         //String clientURI = "mongodb://localhost:27017/?readPreference=primary&appname=MongoDB%20Compass&ssl=false";
-        MongoClient mongoClient = new MongoClient(new MongoClientURI(urlField.getText()));
-        MongoDatabase db = mongoClient.getDatabase(databaseNameField.getText());
+        ErrorWindowController errorWindowController = new ErrorWindowController();
+        if (urlField.getText().equals("") || databaseNameField.getText().equals("") || collectionField.getText().equals("")){
+            errorWindowController.errorWindow("Aby przejść dalej upewnij się, że wpełnione są pola wymagane do połączenia z bazą MongoDB!!!");
+        } else {
+            try{
+                MongoClient mongoClient = new MongoClient(new MongoClientURI(urlField.getText()));
+                MongoDatabase db = mongoClient.getDatabase(databaseNameField.getText());
+                MongoCollection<Document> mongoCollection = db.getCollection(collectionField.getText());
 
-        MongoCollection<Document> mongoCollection = db.getCollection(collectionField.getText());
-        for (Document document : mongoCollection.find()){
-            System.out.println(document.toJson());
+
+                StringBuilder collectionContent = new StringBuilder("[");
+                for (Document document : mongoCollection.find()){
+                    collectionContent.append(document.toJson()).append(", ").append("\n");
+                    System.out.println(document.toJson());
+                }
+                collectionContent = new StringBuilder(collectionContent.substring(0, collectionContent.length() - 2));
+                collectionContent.append("]");
+                dataContent = String.valueOf(collectionContent);
+                System.out.println(collectionContent);
+            } catch (Exception e){
+                errorWindowController.errorWindow("Błąd pobierania danych z MongoDB !! \n" + e);
+            }
+
         }
 
+
+    }
+
+    public void changeAccessData(ActionEvent event) {
+        if (dataFromMongoRadio.isSelected()){
+            directoryFileField.setDisable(true);
+            directoryFileField.setText("");
+            selectJsonFileBtn.setDisable(true);
+            urlField.setDisable(false);
+            databaseNameField.setDisable(false);
+            collectionField.setDisable(false);
+            getDataFromDBBtn.setDisable(false);
+        } else if (dataFromJsonRadio.isSelected()){
+            directoryFileField.setDisable(false);
+            selectJsonFileBtn.setDisable(false);
+            urlField.setDisable(true);
+            databaseNameField.setDisable(true);
+            collectionField.setDisable(true);
+            urlField.setText("");
+            databaseNameField.setText("");
+            collectionField.setText("");
+            getDataFromDBBtn.setDisable(true);
+        }
     }
 }

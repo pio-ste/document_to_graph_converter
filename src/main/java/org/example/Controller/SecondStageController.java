@@ -1,8 +1,6 @@
 package org.example.Controller;
 
 import java.io.IOException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.TreeMap;
@@ -21,7 +19,6 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import org.example.DTO.Document;
-import org.example.Service.CypherService;
 import org.example.Service.JsonService;
 
 public class SecondStageController {
@@ -62,19 +59,20 @@ public class SecondStageController {
     @FXML
     private TextField relationValueField;
 
+    private boolean isFile;
     private String filePath;
-    private String fileName;
+    private String documentName;
     private String catalogPath;
     private String jsonContent;
     private TreeMap<Integer, Document> documentObjects = new TreeMap<>();
 
     @FXML
-    public void setPath(String filePathField, String catalogPathField){
+    public void setPath(String filePathField, String catalogPathField, String collectionName, String collectionContent, boolean isFileSelected){
         filePath = filePathField;
         catalogPath = catalogPathField;
-        Path path = Paths.get(filePath);
-        Path file = path.getFileName();
-        fileName = file.toString().replaceFirst("[.][^.]+$", "");
+        documentName = collectionName;
+        jsonContent = collectionContent;
+        isFile = isFileSelected;
     }
 
     @FXML
@@ -83,9 +81,12 @@ public class SecondStageController {
         Platform.runLater(() -> {
             JsonService jsonService = new JsonService();
             try {
-                jsonContent = jsonService.readFileAsString(filePath, fileName);
+                if (isFile){
+                    documentName = jsonService.getFileName(filePath);
+                    jsonContent = jsonService.readFileAsString(filePath);
+                }
                 jsonContentTextField.setText(jsonContent);
-                documentObjects = jsonService.iterateOverJson(jsonContent);
+                documentObjects = jsonService.iterateOverJson(jsonContent, documentName);
                 setTableView();
             } catch (Exception e) {
                 e.printStackTrace();
@@ -120,7 +121,7 @@ public class SecondStageController {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/example/FXML/thirdStage.fxml"));
         Parent root = loader.load();
         ThirdStageController thirdStageController = loader.getController();
-        thirdStageController.setPath(documentObjects, catalogPath, fileName);
+        thirdStageController.setPath(documentObjects, catalogPath, documentName);
         Scene scene = new Scene(root);
         Stage stage = (Stage)((Node)actionEvent.getSource()).getScene().getWindow();
         stage.setScene(scene);
