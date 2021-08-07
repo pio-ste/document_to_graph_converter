@@ -143,17 +143,17 @@
                               </VBox>
                               <VBox>
                                  <children>
-                                    <TextField fx:id="urlField" prefWidth="350.0">
+                                    <TextField fx:id="uriMongoField" prefWidth="350.0">
                                        <VBox.margin>
                                           <Insets top="10.0" />
                                        </VBox.margin>
                                     </TextField>
-                                    <TextField fx:id="databaseNameField" prefWidth="250.0">
+                                    <TextField fx:id="dbNameMongoField" prefWidth="250.0">
                                        <VBox.margin>
                                           <Insets top="20.0" />
                                        </VBox.margin>
                                     </TextField>
-                                    <TextField fx:id="collectionField">
+                                    <TextField fx:id="collectionMongoField">
                                        <VBox.margin>
                                           <Insets top="20.0" />
                                        </VBox.margin>
@@ -165,9 +165,17 @@
                               </VBox>
                            </children>
                         </HBox>
-                        <Button fx:id="getDataFromDBBtn" mnemonicParsing="false" onAction="#getData" style="-fx-background-color: #2693ff;" text="Pobierz dane">
+                        <Label fx:id="statusMongoLabel" text="Dane pobrano pomyślnie" textFill="#32d700">
                            <VBox.margin>
-                              <Insets top="30.0" />
+                              <Insets top="10.0" />
+                           </VBox.margin>
+                           <font>
+                              <Font name="System Bold" size="13.0" />
+                           </font>
+                        </Label>
+                        <Button fx:id="getDataFromDBBtn" mnemonicParsing="false" onAction="#getDataMongo" style="-fx-background-color: #2693ff;" text="Pobierz dane">
+                           <VBox.margin>
+                              <Insets top="20.0" />
                            </VBox.margin>
                            <font>
                               <Font name="System Bold" size="12.0" />
@@ -240,7 +248,7 @@
                   <Insets top="50.0" />
                </VBox.margin>
             </Label>
-            <HBox alignment="CENTER" prefHeight="75.0" prefWidth="200.0">
+            <HBox alignment="CENTER" prefWidth="200.0">
                <children>
                   <Button mnemonicParsing="false" onAction="#selectDirectory" prefWidth="125.0" style="-fx-background-color: #2693ff;" text="Wybierz katalog...">
                      <font>
@@ -253,7 +261,91 @@
                      </HBox.margin>
                   </TextField>
                </children>
+               <VBox.margin>
+                  <Insets top="10.0" />
+               </VBox.margin>
             </HBox>
+            <Label text="Wpisz dane aby połączyć się z bazą Neo4j" textFill="#2693ff">
+               <font>
+                  <Font name="System Bold" size="22.0" />
+               </font>
+               <VBox.margin>
+                  <Insets top="50.0" />
+               </VBox.margin>
+            </Label>
+            <HBox alignment="TOP_CENTER" prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <VBox>
+                     <children>
+                        <Label text="Adres URI" textFill="#2693ff">
+                           <font>
+                              <Font name="System Bold" size="16.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets top="10.0" />
+                           </VBox.margin>
+                        </Label>
+                        <Label text="Nazwa użytkownika" textFill="#2693ff">
+                           <font>
+                              <Font name="System Bold" size="16.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets top="20.0" />
+                           </VBox.margin>
+                        </Label>
+                        <Label text="Hasło" textFill="#2693ff">
+                           <font>
+                              <Font name="System Bold" size="16.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets top="20.0" />
+                           </VBox.margin>
+                        </Label>
+                     </children>
+                  </VBox>
+                  <VBox>
+                     <children>
+                        <TextField fx:id="uriNeo4jField" prefWidth="350.0">
+                           <VBox.margin>
+                              <Insets top="10.0" />
+                           </VBox.margin>
+                        </TextField>
+                        <TextField fx:id="userNameNeo4jField" prefWidth="350.0">
+                           <VBox.margin>
+                              <Insets top="20.0" />
+                           </VBox.margin>
+                        </TextField>
+                        <TextField fx:id="passwordNoe4jField" prefWidth="350.0">
+                           <VBox.margin>
+                              <Insets top="20.0" />
+                           </VBox.margin>
+                        </TextField>
+                     </children>
+                     <HBox.margin>
+                        <Insets left="20.0" />
+                     </HBox.margin>
+                  </VBox>
+               </children>
+               <VBox.margin>
+                  <Insets top="10.0" />
+               </VBox.margin>
+            </HBox>
+            <Label fx:id="statusNeo4jLabel" text="Połączono z Neo4j" textFill="#32d700">
+               <VBox.margin>
+                  <Insets top="10.0" />
+               </VBox.margin>
+               <font>
+                  <Font name="System Bold" size="13.0" />
+               </font>
+            </Label>
+            <Button mnemonicParsing="false" onAction="#testConnectionNeo4j" style="-fx-background-color: #2693ff;" text="Test połączenia">
+               <VBox.margin>
+                  <Insets top="20.0" />
+               </VBox.margin>
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+            </Button>
          </children>
       </VBox>
    </center>

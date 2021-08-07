@@ -6,6 +6,7 @@ module org.example {
     requires org.json;
     requires com.google.common;
     requires mongo.java.driver;
+    requires org.neo4j.driver;
 
     opens org.example.Controller to javafx.fxml;
     opens org.example.Service to javafx.base;

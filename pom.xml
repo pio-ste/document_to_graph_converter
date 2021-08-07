@@ -45,7 +45,11 @@
             <artifactId>mongo-java-driver</artifactId>
             <version>3.12.8</version>
         </dependency>
-
+        <dependency>
+            <groupId>org.neo4j.driver</groupId>
+            <artifactId>neo4j-java-driver</artifactId>
+            <version>4.3.4</version>
+        </dependency>
 
 
     </dependencies>

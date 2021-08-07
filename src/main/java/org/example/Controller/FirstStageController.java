@@ -2,11 +2,6 @@ package org.example.Controller;
 
 import java.io.File;
 import java.io.IOException;
-
-import com.mongodb.MongoClient;
-import com.mongodb.MongoClientURI;
-import com.mongodb.client.MongoCollection;
-import com.mongodb.client.MongoDatabase;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -14,12 +9,18 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import org.bson.Document;
+import org.example.Service.DbService;
+import org.neo4j.driver.AuthTokens;
+import org.neo4j.driver.Driver;
+import org.neo4j.driver.GraphDatabase;
+import org.neo4j.driver.Session;
+
 
 public class FirstStageController {
 
@@ -36,13 +37,22 @@ public class FirstStageController {
     private Button getDataFromDBBtn;
 
     @FXML
-    private TextField urlField;
+    private TextField uriMongoField;
 
     @FXML
-    private TextField databaseNameField;
+    private TextField dbNameMongoField;
 
     @FXML
-    private TextField collectionField;
+    private TextField collectionMongoField;
+
+    @FXML
+    private TextField uriNeo4jField;
+
+    @FXML
+    private TextField userNameNeo4jField;
+
+    @FXML
+    private TextField passwordNoe4jField;
 
     @FXML
     private RadioButton dataFromMongoRadio;
@@ -50,17 +60,25 @@ public class FirstStageController {
     @FXML
     private RadioButton dataFromJsonRadio;
 
+    @FXML
+    private Label statusMongoLabel;
+
+    @FXML
+    private Label statusNeo4jLabel;
+
     private String dataContent;
 
     @FXML
     public void initialize(){
+        statusMongoLabel.setVisible(false);
+        statusNeo4jLabel.setVisible(false);
         dataFromMongoRadio.setSelected(true);
         directoryFileField.setDisable(true);
         directoryFileField.setText("");
         selectJsonFileBtn.setDisable(true);
-        urlField.setDisable(false);
-        databaseNameField.setDisable(false);
-        collectionField.setDisable(false);
+        uriMongoField.setDisable(false);
+        dbNameMongoField.setDisable(false);
+        collectionMongoField.setDisable(false);
         getDataFromDBBtn.setDisable(false);
     }
 
@@ -75,7 +93,7 @@ public class FirstStageController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/example/FXML/secondStage.fxml"));
             Parent root = loader.load();
             SecondStageController secondController = loader.getController();
-            secondController.setPath(directoryFileField.getText(), directoryCatalogField.getText(), collectionField.getText(), dataContent, dataFromJsonRadio.isSelected());
+            secondController.setPath(directoryFileField.getText(), directoryCatalogField.getText(), collectionMongoField.getText(), dataContent, dataFromJsonRadio.isSelected());
             Scene scene = new Scene(root);
             Stage stage = (Stage)((Node)actionEvent.getSource()).getScene().getWindow();
             stage.setScene(scene);
@@ -109,55 +127,53 @@ public class FirstStageController {
         }
     }
 
-    public void getData(ActionEvent event) {
+    public void getDataMongo(ActionEvent event) {
         //String clientURI = "mongodb://localhost:27017/?readPreference=primary&appname=MongoDB%20Compass&ssl=false";
         ErrorWindowController errorWindowController = new ErrorWindowController();
-        if (urlField.getText().equals("") || databaseNameField.getText().equals("") || collectionField.getText().equals("")){
+        if (uriMongoField.getText().equals("") || dbNameMongoField.getText().equals("") || collectionMongoField.getText().equals("")){
             errorWindowController.errorWindow("Aby przejść dalej upewnij się, że wpełnione są pola wymagane do połączenia z bazą MongoDB!!!");
         } else {
-            try{
-                MongoClient mongoClient = new MongoClient(new MongoClientURI(urlField.getText()));
-                MongoDatabase db = mongoClient.getDatabase(databaseNameField.getText());
-                MongoCollection<Document> mongoCollection = db.getCollection(collectionField.getText());
-
-
-                StringBuilder collectionContent = new StringBuilder("[");
-                for (Document document : mongoCollection.find()){
-                    collectionContent.append(document.toJson()).append(", ").append("\n");
-                    System.out.println(document.toJson());
-                }
-                collectionContent = new StringBuilder(collectionContent.substring(0, collectionContent.length() - 2));
-                collectionContent.append("]");
-                dataContent = String.valueOf(collectionContent);
-                System.out.println(collectionContent);
-            } catch (Exception e){
-                errorWindowController.errorWindow("Błąd pobierania danych z MongoDB !! \n" + e);
-            }
-
+            DbService dbService = new DbService();
+            dataContent = dbService.getDataFromMongo(uriMongoField.getText(), dbNameMongoField.getText(), collectionMongoField.getText(), errorWindowController, statusMongoLabel);
+            System.out.println(dataContent);
         }
-
-
     }
 
     public void changeAccessData(ActionEvent event) {
         if (dataFromMongoRadio.isSelected()){
+            statusMongoLabel.setVisible(false);
             directoryFileField.setDisable(true);
             directoryFileField.setText("");
             selectJsonFileBtn.setDisable(true);
-            urlField.setDisable(false);
-            databaseNameField.setDisable(false);
-            collectionField.setDisable(false);
+            uriMongoField.setDisable(false);
+            dbNameMongoField.setDisable(false);
+            collectionMongoField.setDisable(false);
             getDataFromDBBtn.setDisable(false);
         } else if (dataFromJsonRadio.isSelected()){
+            statusMongoLabel.setVisible(false);
             directoryFileField.setDisable(false);
             selectJsonFileBtn.setDisable(false);
-            urlField.setDisable(true);
-            databaseNameField.setDisable(true);
-            collectionField.setDisable(true);
-            urlField.setText("");
-            databaseNameField.setText("");
-            collectionField.setText("");
+            uriMongoField.setDisable(true);
+            dbNameMongoField.setDisable(true);
+            collectionMongoField.setDisable(true);
+            uriMongoField.setText("");
+            dbNameMongoField.setText("");
+            collectionMongoField.setText("");
             getDataFromDBBtn.setDisable(true);
         }
+    }
+
+    public void testConnectionNeo4j(ActionEvent event) {
+        try {
+            statusNeo4jLabel.setVisible(false);
+            Driver driver = GraphDatabase.driver(uriNeo4jField.getText(), AuthTokens.basic(userNameNeo4jField.getText(), passwordNoe4jField.getText()));
+            Session session = driver.session();
+            session.writeTransaction(transaction -> transaction.run("Match () Return 1 Limit 1"));
+            statusNeo4jLabel.setVisible(true);
+        } catch (Exception e) {
+            ErrorWindowController errorWindowController = new ErrorWindowController();
+            errorWindowController.errorWindow("Brak połączenia z Neo4j. Sprawdź poprawność wpisanych danych!!!");
+        }
+
     }
 }
