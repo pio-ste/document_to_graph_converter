@@ -65,14 +65,21 @@ public class SecondStageController {
     private String catalogPath;
     private String jsonContent;
     private TreeMap<Integer, Document> documentObjects = new TreeMap<>();
+    private String uri;
+    private String userName;
+    private String password;
 
     @FXML
-    public void setPath(String filePathField, String catalogPathField, String collectionName, String collectionContent, boolean isFileSelected){
+    public void setPath(String filePathField, String catalogPathField, String collectionName, String collectionContent, boolean isFileSelected,
+                        String uriNeo4j, String userNameNeo4j, String passwordNeo4j){
         filePath = filePathField;
         catalogPath = catalogPathField;
         documentName = collectionName;
         jsonContent = collectionContent;
         isFile = isFileSelected;
+        uri = uriNeo4j;
+        userName = userNameNeo4j;
+        password = passwordNeo4j;
     }
 
     @FXML
@@ -121,7 +128,7 @@ public class SecondStageController {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/example/FXML/thirdStage.fxml"));
         Parent root = loader.load();
         ThirdStageController thirdStageController = loader.getController();
-        thirdStageController.setPath(documentObjects, catalogPath, documentName);
+        thirdStageController.setPath(documentObjects, catalogPath, documentName, uri, userName, password);
         Scene scene = new Scene(root);
         Stage stage = (Stage)((Node)actionEvent.getSource()).getScene().getWindow();
         stage.setScene(scene);

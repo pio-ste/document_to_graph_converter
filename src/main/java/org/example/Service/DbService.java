@@ -7,6 +7,10 @@ import com.mongodb.client.MongoDatabase;
 import javafx.scene.control.Label;
 import org.bson.Document;
 import org.example.Controller.ErrorWindowController;
+import org.neo4j.driver.AuthTokens;
+import org.neo4j.driver.Driver;
+import org.neo4j.driver.GraphDatabase;
+import org.neo4j.driver.Session;
 
 public class DbService {
 
@@ -30,5 +34,12 @@ public class DbService {
             errorWindowController.errorWindow("Błąd pobierania danych z MongoDB !! \n" + e);
         }
         return "[{}]";
+    }
+
+    public void executeQueryNeo4j(String uri, String userName, String password, String query){
+        Driver driver = GraphDatabase.driver(uri, AuthTokens.basic(userName, password));
+        Session session = driver.session();
+        session.writeTransaction(transaction -> transaction.run(query));
+        session.close();
     }
 }

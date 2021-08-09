@@ -93,7 +93,8 @@ public class FirstStageController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/example/FXML/secondStage.fxml"));
             Parent root = loader.load();
             SecondStageController secondController = loader.getController();
-            secondController.setPath(directoryFileField.getText(), directoryCatalogField.getText(), collectionMongoField.getText(), dataContent, dataFromJsonRadio.isSelected());
+            secondController.setPath(directoryFileField.getText(), directoryCatalogField.getText(), collectionMongoField.getText(), dataContent,
+                    dataFromJsonRadio.isSelected(), uriNeo4jField.getText(), userNameNeo4jField.getText(), passwordNoe4jField.getText());
             Scene scene = new Scene(root);
             Stage stage = (Stage)((Node)actionEvent.getSource()).getScene().getWindow();
             stage.setScene(scene);
@@ -165,15 +166,13 @@ public class FirstStageController {
 
     public void testConnectionNeo4j(ActionEvent event) {
         try {
+            DbService dbService = new DbService();
             statusNeo4jLabel.setVisible(false);
-            Driver driver = GraphDatabase.driver(uriNeo4jField.getText(), AuthTokens.basic(userNameNeo4jField.getText(), passwordNoe4jField.getText()));
-            Session session = driver.session();
-            session.writeTransaction(transaction -> transaction.run("Match () Return 1 Limit 1"));
+            dbService.executeQueryNeo4j(uriNeo4jField.getText(), userNameNeo4jField.getText(), passwordNoe4jField.getText(), "Match () Return 1 Limit 1");
             statusNeo4jLabel.setVisible(true);
         } catch (Exception e) {
             ErrorWindowController errorWindowController = new ErrorWindowController();
             errorWindowController.errorWindow("Brak połączenia z Neo4j. Sprawdź poprawność wpisanych danych!!!");
         }
-
     }
 }
