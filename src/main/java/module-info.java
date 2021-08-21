@@ -1,10 +1,7 @@
 module org.example {
     requires javafx.controls;
     requires javafx.fxml;
-    requires com.fasterxml.jackson.databind;
-    requires gson;
     requires org.json;
-    requires com.google.common;
     requires mongo.java.driver;
     requires org.neo4j.driver;
 
