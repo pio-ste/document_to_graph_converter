@@ -26,7 +26,6 @@ public class CypherService {
             writer.write(";");
             writer.close();
         } catch (IOException e) {
-            System.out.println("Błąd podczas zapisywania do pliku.");
             e.printStackTrace();
         }
     }
@@ -86,7 +85,7 @@ public class CypherService {
                                 queryRelation.append(valuesEntry.getKey()).append(":[").append(writeNumberOrString(valuesEntry.getValue())).append("], ");
                             }
                             queryRelation = new StringBuilder(queryRelation.substring(0, queryRelation.length() - 2));
-                            queryRelation.append("}").append("]->(").append(document.getNodeName()).append("_").append(document.getId().toString()).append("),");;
+                            queryRelation.append("}").append("]->(").append(document.getNodeName()).append("_").append(document.getId().toString()).append("),");
                         }
                     }
                 }
@@ -130,10 +129,8 @@ public class CypherService {
                 FileWriter writer = new FileWriter(path);
                 writer.write("");
                 writer.close();
-                System.out.println("Plik już istnieje.");
             }
         } catch (IOException e) {
-            System.out.println("Wystąpił błąd podczas tworzenia pliku.");
             e.printStackTrace();
         }
     }

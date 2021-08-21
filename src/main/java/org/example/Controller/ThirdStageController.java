@@ -70,10 +70,11 @@ public class ThirdStageController {
         stage.show();
     }
 
+    @FXML
     public void executeQuery(ActionEvent event) {
         ErrorWindowController errorWindowController = new ErrorWindowController();
         if (uri.equals("") || userName.equals("") || password.equals("")){
-            errorWindowController.errorWindow("Brak podanych danych do połączenia się z Neo4j !!!");
+            errorWindowController.errorWindow("Brak podanych danych do połączenia się z Neo4j!!!");
         } else {
             try {
                 DbService dbService = new DbService();
