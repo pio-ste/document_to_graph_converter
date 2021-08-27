@@ -89,7 +89,7 @@
                         <Font name="System Bold" size="18.0" />
                      </font>
                   </Label>
-                  <Button mnemonicParsing="false" onAction="#executeQuery" style="-fx-background-color: #2693ff;" text="Wykonaj polcenie w Neo4j">
+                  <Button fx:id="runQueryBtn" mnemonicParsing="false" onAction="#executeQuery" style="-fx-background-color: #2693ff;" text="Wykonaj polcenie w Neo4j">
                      <font>
                         <Font name="System Bold" size="12.0" />
                      </font>

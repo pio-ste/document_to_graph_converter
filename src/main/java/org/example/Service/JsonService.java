@@ -14,10 +14,10 @@ import java.util.TreeMap;
 
 public class JsonService {
 
-    private String edgeName;
-    private String joinEdgeName;
-    private Integer edgeID;
-    private Integer joinEdgeID;
+    private String nodeName;
+    private String joinNodeName;
+    private Integer nodeID;
+    private Integer joinNodeID;
     private boolean isArray;
 
     private Integer counter = 0;
@@ -39,14 +39,14 @@ public class JsonService {
                 String key = keys.next();
                 jsonConditions(key, jsonObject, mapOfKeyValuesDocument);
             }
-
             addElementsIntoMap(mapOfKeyValuesDocument, "Object");
             mapOfObjectID.clear();
         }
         return mapOfDocuments;
     }
 
-    private void jsonConditions(String key, JSONObject jsonObject, LinkedHashMap<String, String> mapOfKeyValuesDocument){
+    private void jsonConditions(String key, JSONObject jsonObject,
+                                LinkedHashMap<String, String> mapOfKeyValuesDocument){
         if (jsonObject.get(key) instanceof JSONObject) {
             getJsonObject(key, jsonObject);
         } else if (jsonObject.get(key) instanceof JSONArray) {
@@ -62,8 +62,7 @@ public class JsonService {
         LinkedHashMap<String, String> mapOfKeyValuesDocument = new LinkedHashMap<>();
         JSONObject jsonObjectOfObject = jsonObject.getJSONObject(key);
         for (int j=0; j<jsonObjectOfObject.names().length(); j++){
-            if((jsonObjectOfObject.get(jsonObjectOfObject.names().getString(j)) instanceof JSONObject) || (jsonObjectOfObject.get(jsonObjectOfObject.names().getString(j)) instanceof JSONArray)) {
-                jsonConditions(jsonObjectOfObject.names().getString(j), jsonObjectOfObject, mapOfKeyValuesDocument);
+            if((jsonObjectOfObject.get(jsonObjectOfObject.names().getString(j)) instanceof JSONObject) || (jsonObjectOfObject.get(jsonObjectOfObject.names().getString(j)) instanceof JSONArray)) { jsonConditions(jsonObjectOfObject.names().getString(j), jsonObjectOfObject, mapOfKeyValuesDocument);
             } else {
                 mapOfKeyValuesDocument.put(jsonObjectOfObject.names().getString(j), jsonObjectOfObject.get(jsonObjectOfObject.names().getString(j)).toString());
             }
@@ -106,18 +105,19 @@ public class JsonService {
 
     private void addElementsIntoMap(LinkedHashMap<String, String> mapOfKeyValuesDocument, String type) {
         LinkedHashMap<String, String> mapOfRelationValues = new LinkedHashMap<>();
-        edgeID = mapOfObjectID.lastKey();
-        edgeName = mapOfObjectID.lastEntry().getValue();
-        mapOfObjectID.remove(edgeID);
+        nodeID = mapOfObjectID.lastKey();
+        nodeName = mapOfObjectID.lastEntry().getValue();
+        mapOfObjectID.remove(nodeID);
         if(mapOfObjectID.isEmpty()){
-            joinEdgeID = null;
-            joinEdgeName = null;
+            joinNodeID = null;
+            joinNodeName = null;
         } else {
-            joinEdgeID = mapOfObjectID.lastKey();
-            joinEdgeName = mapOfObjectID.lastEntry().getValue();
+            joinNodeID = mapOfObjectID.lastKey();
+            joinNodeName = mapOfObjectID.lastEntry().getValue();
 
         }
-        mapOfDocuments.put(edgeID, new Document(edgeID, null, mapOfRelationValues, edgeName, joinEdgeID, joinEdgeName, type, mapOfKeyValuesDocument));
+        mapOfDocuments.put(nodeID, new Document(nodeID, "posiada", mapOfRelationValues,
+                nodeName, joinNodeID, joinNodeName, type, mapOfKeyValuesDocument));
     }
 
     public String readFileAsString(String filePath) throws Exception {
@@ -131,5 +131,4 @@ public class JsonService {
         name = file.toString().replaceFirst("[.][^.]+$", "");
         return name;
     }
-
 }

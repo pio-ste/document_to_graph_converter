@@ -1,7 +1,5 @@
 package org.example.Controller;
 
-import java.io.File;
-import java.io.IOException;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -16,10 +14,9 @@ import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.example.Service.DbService;
-import org.neo4j.driver.AuthTokens;
-import org.neo4j.driver.Driver;
-import org.neo4j.driver.GraphDatabase;
-import org.neo4j.driver.Session;
+
+import java.io.File;
+import java.io.IOException;
 
 
 public class FirstStageController {
@@ -114,8 +111,6 @@ public class FirstStageController {
         }
     }
 
-
-
     public void selectDirectory(ActionEvent event) {
         DirectoryChooser directoryChooser = new DirectoryChooser();
         File selectedDirectory = directoryChooser.showDialog(null);
@@ -135,8 +130,11 @@ public class FirstStageController {
             errorWindowController.errorWindow("Aby przejść dalej upewnij się, że wpełnione są pola wymagane do połączenia z bazą MongoDB!!!");
         } else {
             DbService dbService = new DbService();
+            long startTime = System.currentTimeMillis();
             dataContent = dbService.getDataFromMongo(uriMongoField.getText(), dbNameMongoField.getText(), collectionMongoField.getText(), errorWindowController, statusMongoLabel);
-            System.out.println(dataContent);
+            long endTime = System.currentTimeMillis();
+            System.out.println("Czas pobierania danych z MongoDB w milisekundach  "+(endTime - startTime));
+
         }
     }
 
@@ -165,14 +163,8 @@ public class FirstStageController {
     }
 
     public void testConnectionNeo4j(ActionEvent event) {
-        try {
-            DbService dbService = new DbService();
-            statusNeo4jLabel.setVisible(false);
-            dbService.executeQueryNeo4j(uriNeo4jField.getText(), userNameNeo4jField.getText(), passwordNoe4jField.getText(), "Match () Return 1 Limit 1");
-            statusNeo4jLabel.setVisible(true);
-        } catch (Exception e) {
-            ErrorWindowController errorWindowController = new ErrorWindowController();
-            errorWindowController.errorWindow("Brak połączenia z Neo4j. Sprawdź poprawność wpisanych danych!!!");
-        }
+        ErrorWindowController errorWindowController = new ErrorWindowController();
+        DbService dbService = new DbService();
+        dbService.executeQueryNeo4j(uriNeo4jField.getText(), userNameNeo4jField.getText(), passwordNoe4jField.getText(), "Match () Return 1 Limit 1", errorWindowController, statusNeo4jLabel);
     }
 }

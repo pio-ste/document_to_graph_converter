@@ -14,7 +14,8 @@ import org.neo4j.driver.Session;
 
 public class DbService {
 
-    public String getDataFromMongo(String uri, String dbName, String collectionName, ErrorWindowController errorWindowController, Label statusMongoLabel){
+    public String getDataFromMongo(String uri, String dbName, String collectionName,
+                                   ErrorWindowController errorWindowController, Label statusMongoLabel){
         try{
             statusMongoLabel.setVisible(false);
             MongoClient mongoClient = new MongoClient(new MongoClientURI(uri));
@@ -24,9 +25,9 @@ public class DbService {
             StringBuilder collectionContent = new StringBuilder("[");
             for (Document document : mongoCollection.find()){
                 collectionContent.append(document.toJson()).append(", ").append("\n");
-                System.out.println(document.toJson());
+                //System.out.println(document.toJson());
             }
-            collectionContent = new StringBuilder(collectionContent.substring(0, collectionContent.length() - 2));
+            collectionContent = new StringBuilder(collectionContent.substring(0, collectionContent.length() - 3));
             collectionContent.append("]");
             statusMongoLabel.setVisible(true);
             return String.valueOf(collectionContent);
@@ -36,10 +37,17 @@ public class DbService {
         return "[{}]";
     }
 
-    public void executeQueryNeo4j(String uri, String userName, String password, String query){
-        Driver driver = GraphDatabase.driver(uri, AuthTokens.basic(userName, password));
-        Session session = driver.session();
-        session.writeTransaction(transaction -> transaction.run(query));
-        session.close();
+    public void executeQueryNeo4j(String uri, String userName, String password, String query,
+                                  ErrorWindowController errorWindowController, Label statusNeo4jLabel){
+        try{
+            statusNeo4jLabel.setVisible(false);
+            Driver driver = GraphDatabase.driver(uri, AuthTokens.basic(userName, password));
+            Session session = driver.session();
+            session.writeTransaction(transaction -> transaction.run(query));
+            session.close();
+            statusNeo4jLabel.setVisible(true);
+        } catch (Exception e) {
+            errorWindowController.errorWindow("Błąd przy połączeniu z Neo4j !!" + e);
+        }
     }
 }

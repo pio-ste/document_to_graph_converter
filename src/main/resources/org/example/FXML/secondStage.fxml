@@ -79,7 +79,7 @@
             </VBox>
             <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="75.0">
                <children>
-                  <Button mnemonicParsing="false" onAction="#nextStep" prefWidth="70.0" style="-fx-background-color: #2693ff;">
+                  <Button fx:id="thirdStepBtn" mnemonicParsing="false" onAction="#nextStep" prefWidth="70.0" style="-fx-background-color: #2693ff;">
                      <graphic>
                         <ImageView fitHeight="28.0" fitWidth="28.0" pickOnBounds="true" preserveRatio="true">
                            <image>
@@ -207,7 +207,7 @@
                               </TextField>
                            </children>
                         </HBox>
-                        <Button alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#editRelation" style="-fx-background-color: #2693ff;" text="Zatwierdź">
+                        <Button fx:id="setRelationBtn" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#editRelation" style="-fx-background-color: #2693ff;" text="Zatwierdź">
                            <font>
                               <Font name="System Bold" size="12.0" />
                            </font>

@@ -22,7 +22,7 @@
             <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="75.0" />
             <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="300.0">
                <children>
-                  <Label alignment="CENTER" text="Krok 1: Wybór pliku" textFill="#2693ff">
+                  <Label alignment="CENTER" text="Krok 1: Wybór danych" textFill="#2693ff">
                      <font>
                         <Font name="System Bold" size="18.0" />
                      </font>
@@ -61,7 +61,7 @@
             </VBox>
             <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="75.0">
                <children>
-                  <Button mnemonicParsing="false" onAction="#nextStep" prefWidth="70.0" style="-fx-background-color: #2693ff;">
+                  <Button fx:id="secondStepBtn" mnemonicParsing="false" onAction="#nextStep" prefWidth="70.0" style="-fx-background-color: #2693ff;">
                      <graphic>
                         <ImageView fitHeight="28.0" fitWidth="28.0" pickOnBounds="true" preserveRatio="true">
                            <image>
@@ -250,7 +250,7 @@
             </Label>
             <HBox alignment="CENTER" prefWidth="200.0">
                <children>
-                  <Button mnemonicParsing="false" onAction="#selectDirectory" prefWidth="125.0" style="-fx-background-color: #2693ff;" text="Wybierz katalog...">
+                  <Button fx:id="selectDirectoryID" mnemonicParsing="false" onAction="#selectDirectory" prefWidth="125.0" style="-fx-background-color: #2693ff;" text="Wybierz katalog...">
                      <font>
                         <Font name="System Bold" size="12.0" />
                      </font>
@@ -338,7 +338,7 @@
                   <Font name="System Bold" size="13.0" />
                </font>
             </Label>
-            <Button mnemonicParsing="false" onAction="#testConnectionNeo4j" style="-fx-background-color: #2693ff;" text="Test połączenia">
+            <Button fx:id="testConnNeo4jID" mnemonicParsing="false" onAction="#testConnectionNeo4j" style="-fx-background-color: #2693ff;" text="Test połączenia">
                <VBox.margin>
                   <Insets top="20.0" />
                </VBox.margin>

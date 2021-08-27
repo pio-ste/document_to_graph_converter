@@ -51,7 +51,10 @@ public class ThirdStageController {
             CypherService cypherService = new CypherService();
             try {
                 path = cypherService.changePath(catalogPath, fileName);
+                long startTime = System.currentTimeMillis();
                 cypherService.convert(documentObjects, path);
+                long endTime = System.currentTimeMillis();
+                System.out.println("Czas konwertowania danych danych JSON w milisekundach  "+(endTime - startTime));
                 cypherQuery = cypherService.readFile(path);
                 queryTextArea.setText(cypherQuery);
             } catch (Exception e) {
@@ -76,14 +79,8 @@ public class ThirdStageController {
         if (uri.equals("") || userName.equals("") || password.equals("")){
             errorWindowController.errorWindow("Brak podanych danych do połączenia się z Neo4j!!!");
         } else {
-            try {
-                DbService dbService = new DbService();
-                statusNeo4jLabel.setVisible(false);
-                dbService.executeQueryNeo4j(uri, userName, password, cypherQuery);
-                statusNeo4jLabel.setVisible(true);
-            } catch (Exception e) {
-                errorWindowController.errorWindow("Błąd w wykonaniu polecenia!!!");
-            }
+            DbService dbService = new DbService();
+            dbService.executeQueryNeo4j(uri, userName, password, cypherQuery, errorWindowController, statusNeo4jLabel);
         }
     }
 }

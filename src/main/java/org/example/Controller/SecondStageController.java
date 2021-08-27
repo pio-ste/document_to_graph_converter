@@ -1,10 +1,5 @@
 package org.example.Controller;
 
-import java.io.IOException;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.TreeMap;
-
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -20,6 +15,11 @@ import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import org.example.DTO.Document;
 import org.example.Service.JsonService;
+
+import java.io.IOException;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.TreeMap;
 
 public class SecondStageController {
 
@@ -89,11 +89,17 @@ public class SecondStageController {
             JsonService jsonService = new JsonService();
             try {
                 if (isFile){
+                    long startTime = System.currentTimeMillis();
                     documentName = jsonService.getFileName(filePath);
                     jsonContent = jsonService.readFileAsString(filePath);
+                    long endTime = System.currentTimeMillis();
+                    System.out.println("Czas pobierania danych z pliku JSON w milisekundach  "+ (endTime - startTime));
                 }
                 jsonContentTextField.setText(jsonContent);
+                long startTime = System.currentTimeMillis();
                 documentObjects = jsonService.iterateOverJson(jsonContent, documentName);
+                long endTime = System.currentTimeMillis();
+                System.out.println("Czas przetwarzania danych JSON w milisekundach  " +(endTime - startTime));
                 setTableView();
             } catch (Exception e) {
                 e.printStackTrace();
