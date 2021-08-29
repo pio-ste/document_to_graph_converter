@@ -1,5 +1,5 @@
 # document_to_graph_converter
-Converting noSQL document database to graph database from JSON to cypher query language
+Converting NoSQL document database to graph database from JSON to cypher query language
 
 JavaFX, org.json
 
